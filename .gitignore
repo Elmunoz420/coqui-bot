@@ -1,0 +1,15 @@
+**/node_modules/**
+**/build/**
+**/target/**
+**/application-local.properties
+**/wallet/
+
+# Log files
+*.log
+*.log.*.gz
+
+# Environment / secret files
+.env
+.env.*
+**/.env
+**/.env.*

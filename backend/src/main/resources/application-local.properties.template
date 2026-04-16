@@ -1,0 +1,13 @@
+# Local development overrides — safe to commit (no real secrets here)
+# Copy to application-local.properties and fill in your actual values.
+
+spring.datasource.url=jdbc:oracle:thin:@taskbotdb_medium?TNS_ADMIN=./wallet
+spring.datasource.username=ADMIN
+spring.datasource.password=YOUR_ATP_PASSWORD
+
+telegram.bot.token=YOUR_TELEGRAM_BOT_TOKEN
+telegram.bot.name=Oracle_420_bot
+
+deepseek.api.key=sk-disabled
+
+server.port=9090
