@@ -13,8 +13,8 @@ const SPRINTS = ['Sprint 0', 'Sprint 1', 'Sprint 2', 'Sprint 3', 'Sprint 4', 'Sp
 function generarTaskId(sprint, tareasExistentes) {
   const sprintNum = sprint.replace('Sprint ', '');
   const tareasEnSprint = tareasExistentes.filter(t => {
-    const sp = t.sprint || t.descripcion || '';
-    return sp.toLowerCase().includes(sprint.toLowerCase());
+    if (t.sprint != null) return `Sprint ${t.sprint}` === sprint;
+    return (t.descripcion || '').toLowerCase().includes(sprint.toLowerCase());
   });
   const siguiente = String(tareasEnSprint.length + 1).padStart(3, '0');
   return `S${sprintNum}-${siguiente}`;

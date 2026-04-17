@@ -31,6 +31,8 @@ public class ToDoItem {
     double horasEstimadas;        // Mapea a HORAS_ESTIMADAS (nuevo)
     double horasReales;           // Mapea a HORAS_REALES (nuevo)
     boolean done;                 // Inferido de ESTADO (para compatibilidad)
+    Integer sprint;               // Mapea a SPRINT (nuevo)
+    String assignedUser;          // Nombre del usuario asignado (calculado)
     
     public ToDoItem(){
     }
@@ -121,6 +123,12 @@ public class ToDoItem {
         this.horasReales = horasReales;
     }
 
+    public Integer getSprint() { return sprint; }
+    public void setSprint(Integer sprint) { this.sprint = sprint; }
+
+    public String getAssignedUser() { return assignedUser; }
+    public void setAssignedUser(String assignedUser) { this.assignedUser = assignedUser; }
+
     public boolean isDone() {
         return done;
     }
@@ -148,6 +156,8 @@ public class ToDoItem {
                 ", horasEstimadas=" + horasEstimadas +
                 ", horasReales=" + horasReales +
                 ", done=" + done +
+                ", sprint=" + sprint +
+                ", assignedUser='" + assignedUser + '\'' +
                 '}';
     }
 }

@@ -79,7 +79,9 @@ public class ToDoItemService {
         item.setFechaLimite(t.getFechaLimite());
         item.setHorasEstimadas(t.getHorasEstimadas() != null ? t.getHorasEstimadas() : 0.0);
         item.setHorasReales(t.getHorasReales() != null ? t.getHorasReales() : 0.0);
-        
+        item.setSprint(t.getSprint());
+        item.setAssignedUser(t.getUsuarioAsignado() != null ? t.getUsuarioAsignado().getNombre() : null);
+
         boolean done = "completada".equalsIgnoreCase(t.getEstado())
                     || "done".equalsIgnoreCase(t.getEstado())
                     || "cerrada".equalsIgnoreCase(t.getEstado());
@@ -105,6 +107,9 @@ public class ToDoItemService {
         }
         if (td.getHorasReales() >= 0) {
             tarea.setHorasReales((double) td.getHorasReales());
+        }
+        if (td.getSprint() != null) {
+            tarea.setSprint(td.getSprint());
         }
         // Actualizar estado basado en done
         if (td.isDone()) {
@@ -150,6 +155,7 @@ public class ToDoItemService {
         tarea.setFechaLimite(toDoItem.getFechaLimite());
         tarea.setHorasEstimadas(toDoItem.getHorasEstimadas() > 0 ? (double) toDoItem.getHorasEstimadas() : 0.0);
         tarea.setHorasReales(toDoItem.getHorasReales() >= 0 ? (double) toDoItem.getHorasReales() : 0.0);
+        tarea.setSprint(toDoItem.getSprint());
         tarea.setUsuarioAsignado(usuarioPorDefecto);
         tarea.setProyecto(proyectoPorDefecto);
         Tarea saved = tareaRepository.save(tarea);

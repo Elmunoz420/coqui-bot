@@ -6,20 +6,28 @@ const COST_PER_HOUR = 50000 / 2080; // ~$24.04
 
 const TEAM_MEMBERS = ['Joaquín', 'Esteban', 'Juan Pablo', 'Fernanda', 'Emilio'];
 const MEMBER_COLORS = {
-  'Joaquín':    '#4472c4',
-  'Esteban':    '#ed7d31',
-  'Juan Pablo': '#a9d18e',
-  'Fernanda':   '#7030a0',
-  'Emilio':     '#00b0f0',
+  'Joaquín':    '#4A9EFF',
+  'Esteban':    '#FF6B35',
+  'Juan Pablo': '#51CF66',
+  'Fernanda':   '#FF6B9D',
+  'Emilio':     '#FFD43B',
 };
 const SPRINT_COLORS = {
-  'Sprint 1': '#4472c4',
-  'Sprint 2': '#ed7d31',
-  'Sprint 3': '#a9d18e',
-  'Sprint 4': '#7030a0',
-  'Sprint 5': '#00b0f0',
+  'Sprint 0': '#A78BFA',
+  'Sprint 1': '#4A9EFF',
+  'Sprint 2': '#FF6B35',
+  'Sprint 3': '#51CF66',
+  'Sprint 4': '#FF6B9D',
+  'Sprint 5': '#FFD43B',
 };
-const ACTIVE_SPRINTS = ['Sprint 1', 'Sprint 2', 'Sprint 3', 'Sprint 4', 'Sprint 5'];
+const ACTIVE_SPRINTS = ['Sprint 0', 'Sprint 1', 'Sprint 2', 'Sprint 3', 'Sprint 4', 'Sprint 5'];
+const MEMBER_DASH = {
+  'Joaquín':    null,
+  'Esteban':    '8 4',
+  'Juan Pablo': null,
+  'Fernanda':   '4 4',
+  'Emilio':     '2 4',
+};
 
 // ─── Grouped bar chart ────────────────────────────────────────────────────────
 function GroupedBarChart({ title, subtitle, groups, series, colorMap, yLabel, yFormat }) {
@@ -38,16 +46,16 @@ function GroupedBarChart({ title, subtitle, groups, series, colorMap, yLabel, yF
   }
 
   return (
-    <div style={{ background: 'var(--surface-secondary)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-lg)', padding: '1.25rem 1.5rem' }}>
-      <h3 style={{ margin: '0 0 4px', fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-primary)' }}>{title}</h3>
-      {subtitle && <p style={{ margin: '0 0 1rem', fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>{subtitle}</p>}
+    <div style={{ background: 'var(--surface-secondary)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 'var(--radius-lg)', padding: '2rem' }}>
+      <h3 style={{ margin: '0 0 4px', fontSize: '20px', fontWeight: 700, color: '#FFFFFF' }}>{title}</h3>
+      {subtitle && <p style={{ margin: '0 0 1rem', fontSize: '14px', color: 'rgba(255,255,255,0.75)' }}>{subtitle}</p>}
 
       {/* Legend */}
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginBottom: '1rem' }}>
         {series.map(s => (
           <div key={s} style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
             <div style={{ width: '12px', height: '12px', borderRadius: '2px', background: colorMap[s] || '#6b7280' }} />
-            <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{s}</span>
+            <span style={{ fontSize: '14px', color: '#FFFFFF' }}>{s}</span>
           </div>
         ))}
       </div>
@@ -62,13 +70,13 @@ function GroupedBarChart({ title, subtitle, groups, series, colorMap, yLabel, yF
             return (
               <g key={pct}>
                 <line x1={50} x2={totalW + 60} y1={y} y2={y} stroke="var(--border-subtle)" strokeDasharray="4 3" />
-                <text x={45} y={y + 4} textAnchor="end" fontSize="10" fill="var(--text-tertiary)">{fmt(val)}</text>
+                <text x={45} y={y + 4} textAnchor="end" fontSize="13" fill="rgba(255,255,255,0.85)">{fmt(val)}</text>
               </g>
             );
           })}
 
           {/* Y axis label */}
-          <text transform={`translate(12, ${10 + chartH / 2}) rotate(-90)`} textAnchor="middle" fontSize="10" fill="var(--text-tertiary)">{yLabel}</text>
+          <text transform={`translate(12, ${10 + chartH / 2}) rotate(-90)`} textAnchor="middle" fontSize="10" fill="rgba(255,255,255,0.85)">{yLabel}</text>
 
           {/* Bars */}
           {groups.map((group, gi) => {
@@ -86,7 +94,7 @@ function GroupedBarChart({ title, subtitle, groups, series, colorMap, yLabel, yF
                         <title>{`${group.label} — ${s}: ${fmt(val)}`}</title>
                       </rect>
                       {val > 0 && barH > 14 && (
-                        <text x={x + barW / 2} y={y + 11} textAnchor="middle" fontSize="9" fill="white" fontWeight="600">{fmt(val)}</text>
+                        <text x={x + barW / 2} y={y + 11} textAnchor="middle" fontSize="13" fill="white" fontWeight="600">{fmt(val)}</text>
                       )}
                     </g>
                   );
@@ -95,7 +103,7 @@ function GroupedBarChart({ title, subtitle, groups, series, colorMap, yLabel, yF
                 <text
                   x={gx + (series.length * (barW + gap) - gap) / 2}
                   y={10 + chartH + 16}
-                  textAnchor="middle" fontSize="11" fill="var(--text-secondary)"
+                  textAnchor="middle" fontSize="13" fill="#FFFFFF"
                 >{group.label}</text>
               </g>
             );
@@ -110,58 +118,65 @@ function GroupedBarChart({ title, subtitle, groups, series, colorMap, yLabel, yF
 }
 
 // ─── Line chart ───────────────────────────────────────────────────────────────
-function LineChart({ title, subtitle, sprints, series, colorMap, yLabel }) {
+function LineChart({ title, subtitle, sprints, series, colorMap, dashMap, yLabel }) {
   const allVals = series.flatMap(s => sprints.map(sp => s.data[sp] || 0));
   const maxVal = Math.max(...allVals, 1);
   const chartH = 200;
-  const chartW = 500;
+  const chartW = 600;
   const padL = 55, padR = 20, padT = 10, padB = 50;
 
-  function xPos(i) { return padL + (i / (sprints.length - 1)) * chartW; }
+  function xPos(i) {
+    if (sprints.length === 1) return padL + chartW / 2;
+    return padL + (i / (sprints.length - 1)) * (chartW - padL * 0.5);
+  }
   function yPos(v) { return padT + chartH * (1 - v / maxVal); }
 
   return (
-    <div style={{ background: 'var(--surface-secondary)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-lg)', padding: '1.25rem 1.5rem' }}>
-      <h3 style={{ margin: '0 0 4px', fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-primary)' }}>{title}</h3>
-      {subtitle && <p style={{ margin: '0 0 1rem', fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>{subtitle}</p>}
+    <div style={{ background: 'var(--surface-secondary)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 'var(--radius-lg)', padding: '2rem' }}>
+      <h3 style={{ margin: '0 0 4px', fontSize: '20px', fontWeight: 700, color: '#FFFFFF' }}>{title}</h3>
+      {subtitle && <p style={{ margin: '0 0 1rem', fontSize: '14px', color: 'rgba(255,255,255,0.75)' }}>{subtitle}</p>}
 
       {/* Legend */}
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginBottom: '1rem' }}>
         {series.map(s => (
           <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
             <div style={{ width: '20px', height: '3px', background: colorMap[s.label] || '#6b7280', borderRadius: '2px' }} />
-            <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{s.label}</span>
+            <span style={{ fontSize: '14px', color: '#FFFFFF' }}>{s.label}</span>
           </div>
         ))}
       </div>
 
       <div style={{ overflowX: 'auto' }}>
-        <svg width={chartW + padL + padR} height={chartH + padT + padB} style={{ display: 'block' }}>
+        <svg viewBox={`0 0 ${chartW + padL + padR} ${chartH + padT + padB}`} width="100%" height="100%" style={{ display: 'block', minHeight: chartH + padT + padB }}>
           {/* Gridlines */}
           {[0, 0.25, 0.5, 0.75, 1].map(pct => {
             const y = padT + chartH * (1 - pct);
             return (
               <g key={pct}>
                 <line x1={padL} x2={padL + chartW} y1={y} y2={y} stroke="var(--border-subtle)" strokeDasharray="4 3" />
-                <text x={padL - 6} y={y + 4} textAnchor="end" fontSize="10" fill="var(--text-tertiary)">{Math.round(maxVal * pct)}</text>
+                <text x={padL - 6} y={y + 4} textAnchor="end" fontSize="13" fill="rgba(255,255,255,0.85)">{Math.round(maxVal * pct)}</text>
               </g>
             );
           })}
 
           {/* Y label */}
-          <text transform={`translate(12, ${padT + chartH / 2}) rotate(-90)`} textAnchor="middle" fontSize="10" fill="var(--text-tertiary)">{yLabel}</text>
+          <text transform={`translate(12, ${padT + chartH / 2}) rotate(-90)`} textAnchor="middle" fontSize="13" fill="rgba(255,255,255,0.85)">{yLabel}</text>
 
-          {/* Lines */}
-          {series.map(s => {
+          {/* X axis baseline — rendered before lines so zero-value lines appear on top */}
+          <line x1={padL} x2={padL + chartW} y1={padT + chartH} y2={padT + chartH} stroke="var(--border-default)" />
+
+          {/* Lines — dashed series sorted last so they render on top of solid lines */}
+          {[...series].sort((a, b) => (dashMap?.[a.label] ? 1 : 0) - (dashMap?.[b.label] ? 1 : 0)).map(s => {
             const pts = sprints.map((sp, i) => `${xPos(i)},${yPos(s.data[sp] || 0)}`).join(' ');
+            const isDashed = !!dashMap?.[s.label];
             return (
               <g key={s.label}>
-                <polyline points={pts} fill="none" stroke={colorMap[s.label] || '#6b7280'} strokeWidth="2.5" />
+                <polyline points={pts} fill="none" stroke={colorMap[s.label] || '#6b7280'} strokeWidth={isDashed ? 4 : 3} strokeDasharray={dashMap?.[s.label] || undefined} />
                 {sprints.map((sp, i) => {
                   const val = s.data[sp] || 0;
                   return (
                     <g key={sp}>
-                      <circle cx={xPos(i)} cy={yPos(val)} r="4" fill={colorMap[s.label] || '#6b7280'} />
+                      <circle cx={xPos(i)} cy={yPos(val)} r="6" fill={colorMap[s.label] || '#6b7280'} stroke="var(--surface-secondary)" strokeWidth="2" />
                       <title>{`${s.label} — ${sp}: ${val.toFixed(1)}h`}</title>
                     </g>
                   );
@@ -172,10 +187,8 @@ function LineChart({ title, subtitle, sprints, series, colorMap, yLabel }) {
 
           {/* X axis labels */}
           {sprints.map((sp, i) => (
-            <text key={sp} x={xPos(i)} y={padT + chartH + 20} textAnchor="middle" fontSize="11" fill="var(--text-secondary)">{sp}</text>
+            <text key={sp} x={xPos(i)} y={padT + chartH + 20} textAnchor="middle" fontSize="13" fill="#FFFFFF">{sp}</text>
           ))}
-
-          <line x1={padL} x2={padL + chartW} y1={padT + chartH} y2={padT + chartH} stroke="var(--border-default)" />
         </svg>
       </div>
     </div>
@@ -198,15 +211,19 @@ function KPIDashboard() {
 
   const kpis = useMemo(() => {
     function getDevName(task) {
-      const assigned = task.assignedUser || '';
+      const assigned = (task.assignedUser || '').toLowerCase();
       for (const m of TEAM_MEMBERS) {
-        if (assigned.includes(m)) return m;
+        if (assigned.includes(m.toLowerCase())) return m;
       }
       return null;
     }
 
     function getSprintName(task) {
-      const desc = (task.sprint || task.descripcion || task.description || '').toLowerCase();
+      if (task.sprint != null) {
+        const name = `Sprint ${task.sprint}`;
+        if (ACTIVE_SPRINTS.includes(name)) return name;
+      }
+      const desc = (task.descripcion || task.description || '').toLowerCase();
       for (const sp of ACTIVE_SPRINTS) {
         if (desc.includes(sp.toLowerCase())) return sp;
       }
@@ -242,6 +259,10 @@ function KPIDashboard() {
       return { label: dev, data };
     });
 
+    const chart2SeriesFiltered = chart2Series.filter(s =>
+      Object.values(s.data).some(v => v > 0)
+    );
+
     // Chart 3: Cost per developer per sprint
     // Groups = developers, series = sprints
     const chart3Groups = TEAM_MEMBERS.map(dev => {
@@ -260,20 +281,20 @@ function KPIDashboard() {
     const totalCost = totalHrs * COST_PER_HOUR;
     const completedTasks = tasks.filter(t => t.done).length;
 
-    return { chart1Groups, chart2Series, chart3Groups, sprints, totalHrs, totalCost, completedTasks };
+    return { chart1Groups, chart2Series: chart2SeriesFiltered, chart3Groups, sprints, totalHrs, totalCost, completedTasks };
   }, [tasks]);
 
-  if (loading) return <div style={{ padding: '2rem', color: 'var(--text-tertiary)' }}>Loading KPIs...</div>;
+  if (loading) return <div style={{ padding: '2rem', color: 'rgba(255,255,255,0.75)' }}>Loading KPIs...</div>;
   if (error) return <div style={{ padding: '2rem', color: 'var(--color-error)' }}>Error: {error}</div>;
 
   return (
     <section>
       <div style={{ marginBottom: '1.5rem' }}>
         <h2 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700 }}>KPI Dashboard</h2>
-        <p style={{ margin: '4px 0 0', fontSize: '0.8rem', color: 'var(--text-tertiary)' }}>
+        <p style={{ margin: '4px 0 0', fontSize: '0.8rem', color: 'rgba(255,255,255,0.75)' }}>
           {tasks.length} tasks total · {kpis.completedTasks} completed · {Math.round(kpis.totalHrs)}h logged · ${Math.round(kpis.totalCost).toLocaleString()} USD total cost
         </p>
-        <p style={{ margin: '2px 0 0', fontSize: '0.72rem', color: 'var(--text-placeholder)' }}>
+        <p style={{ margin: '2px 0 0', fontSize: '0.72rem', color: 'rgba(255,255,255,0.6)' }}>
           Cost formula: real hours × ${COST_PER_HOUR.toFixed(2)}/hr ($50,000/yr ÷ 2,080 hrs)
         </p>
       </div>
@@ -296,6 +317,7 @@ function KPIDashboard() {
           sprints={kpis.sprints}
           series={kpis.chart2Series}
           colorMap={MEMBER_COLORS}
+          dashMap={MEMBER_DASH}
           yLabel="Horas"
         />
 

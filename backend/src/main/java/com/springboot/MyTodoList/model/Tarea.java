@@ -46,6 +46,12 @@ public class Tarea {
     @Column(name = "HORAS_REALES")
     private Double horasReales;
 
+    @Column(name = "SPRINT")
+    private Integer sprint;
+
+    @Transient
+    private String assignedUser;
+
     public Tarea() {}
 
     public int getIdTarea() { return idTarea; }
@@ -83,6 +89,15 @@ public class Tarea {
 
     public Double getHorasReales() { return horasReales; }
     public void setHorasReales(Double horasReales) { this.horasReales = horasReales; }
+
+    public Integer getSprint() { return sprint; }
+    public void setSprint(Integer sprint) { this.sprint = sprint; }
+
+    public String getAssignedUser() {
+        if (assignedUser != null) return assignedUser;
+        return usuarioAsignado != null ? usuarioAsignado.getNombre() : null;
+    }
+    public void setAssignedUser(String assignedUser) { this.assignedUser = assignedUser; }
 
     @Override
     public String toString() {
