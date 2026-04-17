@@ -2,14 +2,14 @@ import React from 'react';
 
 function SummaryCards({ metrics }) {
   const cards = [
-    { key: 'total', label: 'Total Tasks', tone: 'neutral' },
-    { key: 'active', label: 'Active Tasks', tone: 'info' },
-    { key: 'completed', label: 'Completed Tasks', tone: 'success' },
-    { key: 'overdue', label: 'Overdue Tasks', tone: 'danger' }
+    { key: 'total',     label: 'Total de Tareas',      tone: 'neutral' },
+    { key: 'active',    label: 'Tareas Activas',        tone: 'info' },
+    { key: 'completed', label: 'Tareas Completadas',    tone: 'success' },
+    { key: 'overdue',   label: 'Tareas Vencidas',       tone: 'danger' },
   ];
 
   return (
-    <section className="summary-grid" aria-label="Task summary metrics">
+    <section className="summary-grid" aria-label="Resumen de tareas">
       {cards.map((card) => (
         <article key={card.key} className={`summary-card ${card.tone}`}>
           <p className="summary-label">{card.label}</p>
