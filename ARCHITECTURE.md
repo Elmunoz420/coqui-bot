@@ -62,6 +62,7 @@ Served as static files embedded in the Spring Boot JAR (built with `npm run buil
 | `TaskTable` | Task list with toggle-done and delete |
 | `TaskDetailDrawer` | Side panel with task history and AI suggestions |
 | `BotActivityPanel` | Frontend-only activity log |
+| `KpiDashboard` | KPI charts: completed tasks, real hours, and cost per developer per sprint. Reads from `GET /todolist`; all aggregation is client-side. Uses `task.sprint` (integer → "Sprint N") and `task.assignedUser` (case-insensitive substring match against `TEAM_MEMBERS`). |
 
 ### 3. Telegram Bot
 
@@ -99,6 +100,7 @@ Served as static files embedded in the Spring Boot JAR (built with `npm run buil
 | `FECHA_CIERRE` | TIMESTAMP WITH TZ | Set automatically when `done=true` |
 | `HORAS_ESTIMADAS` | NUMBER | Maps to `ToDoItem.horasEstimadas` |
 | `HORAS_REALES` | NUMBER | Maps to `ToDoItem.horasReales` |
+| `SPRINT` | NUMBER (nullable) | Sprint number (1, 2, …); maps to `ToDoItem.sprint` |
 
 ### Table: `USUARIO`
 
@@ -146,6 +148,8 @@ Served as static files embedded in the Spring Boot JAR (built with `npm run buil
 | `fechaLimite` | `FECHA_LIMITE` | `fechaLimite` |
 | `horasEstimadas` | `HORAS_ESTIMADAS` | `horasEstimadas` |
 | `horasReales` | `HORAS_REALES` | `horasReales` |
+| `sprint` | `SPRINT` | `sprint` |
+| `assignedUser` | `@Transient` (from `USUARIO.NOMBRE`) | `assignedUser` |
 
 ---
 

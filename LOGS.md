@@ -91,6 +91,33 @@ if ((requestText.equals(BotCommands.HIDE_COMMAND.getCommand())
 
 ## Change History
 
+### 2026-04-17 — KPI dashboard fixes, model fields, build config
+
+**Backend:**
+- `Tarea.java` — Added `@Column(name = "SPRINT") Integer sprint` and `@Transient String assignedUser` (computed from `usuarioAsignado.getNombre()`). Both fields now flow through `ToDoItemService` → `ToDoItem` DTO → `GET /todolist` JSON response.
+- `ToDoItem.java` — Added `Integer sprint` and `String assignedUser` fields with getters/setters.
+- `ToDoItemService.java` — `tareaToToDoItem()` maps both new fields; `applyToDoItemToTarea()` and `addToDoItem()` propagate `sprint`.
+- `pom.xml` — Changed `<java.version>` from `11` to `17`. Spring Boot 3.x requires Java 17+; JDK 21 (Temurin) is installed and compatible.
+- `application-local.properties` — Added `oracle.jdbc.fanEnabled=false` and explicit `spring.jpa.properties.hibernate.dialect` for Oracle ATP local dev.
+
+**Frontend — KpiDashboard.js:**
+- Added `'Sprint 0'` to `ACTIVE_SPRINTS` and `SPRINT_COLORS` (`#A78BFA`).
+- Fixed `getSprintName()`: integer sprint field (e.g. `1`) now maps directly to `"Sprint 1"` before falling back to text search in `descripcion`. Previous fix (`String(t.sprint || '')`) was silently dropping sprint `0` (falsy) and never matching any sprint name via substring.
+- Fixed `getDevName()`: now case-insensitive (`.toLowerCase()` on both sides). Previously `"esteban"` would not match `"Esteban"`.
+- Updated `MEMBER_COLORS` to high-contrast dark-background palette: Joaquín `#4A9EFF`, Esteban `#FF6B35`, Juan Pablo `#51CF66`, Fernanda `#FF6B9D`, Emilio `#FFD43B`.
+- Added `MEMBER_DASH` map: Esteban `8 4`, Fernanda `4 4`, Emilio `2 4` — distinct dash patterns for overlapping lines.
+- Line chart: `strokeWidth` 2.5→3, dots `r` 4→6 with halo stroke. Dashed series sorted last in SVG render order so they paint on top of solid lines. Esteban's dashed lines get `strokeWidth=4`.
+- Line chart: `xPos()` fixed for single-sprint edge case; `chartW` 500→600; SVG made responsive via `viewBox` + `width="100%"`.
+- X-axis baseline moved before `{/* Lines */}` so zero-value lines are not painted over.
+- `chart2Series` filtered to exclude developers with all-zero hours before passing to `LineChart` (avoids phantom zero lines on first render before API resolves).
+- All chart text colours updated to `#FFFFFF` / `rgba(255,255,255,x)` for dark background readability. Chart card borders changed to `rgba(255,255,255,0.15)`.
+- Font sizes: titles `20px`, subtitles/legend `14px`, axis labels/values `13px`, bar value labels `13px`. Card padding increased to `2rem`.
+
+**Frontend — TaskComposer.js:**
+- Fixed `generarTaskId()`: integer `t.sprint` (e.g. `1`) now maps to `"Sprint 1"` directly (`\`Sprint ${t.sprint}\` === sprint`), falling back to text search in `descripcion`. Previous string-conversion approach was comparing `"1".includes("sprint 1")` → always false.
+
+---
+
 ### 2026-04-14 — Major architecture migration (inferred from code state)
 
 **Changed:**

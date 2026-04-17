@@ -8,7 +8,7 @@ A full-stack task management application with a **Telegram bot interface**, **Re
 
 | Layer | Technology |
 |---|---|
-| Backend | Spring Boot 3 (Java 22) |
+| Backend | Spring Boot 3 (Java 17+, tested with JDK 21) |
 | Frontend | React 18 + Material UI |
 | Database | Oracle ATP (Autonomous Transaction Processing) |
 | Bot | Telegram Bot API (long-polling) |
@@ -89,7 +89,7 @@ MtdrSpring/
 
 ## Prerequisites
 
-- **Java 21+** (tested with 22)
+- **Java 17+** (tested with JDK 21 Temurin; `pom.xml` targets Java 17)
 - **Maven 3.8+** (or use the included `./mvnw` wrapper)
 - **Node.js 18+** and npm (for frontend development)
 - **Oracle ATP wallet** — download from OCI Console → Autonomous Database → DB Connection → Download Wallet
@@ -172,6 +172,17 @@ cd backend
 ```
 
 ### 7. Run the application
+
+**Quickest option — Maven wrapper (recommended for local dev):**
+
+Run from the `backend/` directory so `TNS_ADMIN=./wallet` resolves correctly:
+
+```bash
+cd backend
+.\mvnw spring-boot:run "-Dspring-boot.run.profiles=local"
+```
+
+**Alternative — run the JAR directly:**
 
 ```bash
 java \
@@ -298,7 +309,9 @@ Swagger UI: `/swagger-ui/index.html`
   "createdAt": "2025-04-10T12:00:00Z",
   "fechaLimite": null,
   "horasEstimadas": 0.0,
-  "horasReales": 0.0
+  "horasReales": 0.0,
+  "sprint": 1,
+  "assignedUser": "Esteban Muñoz"
 }
 ```
 
