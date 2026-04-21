@@ -51,7 +51,7 @@ function TaskComposer({ onAddItem, isInserting, existingTasks = [] }) {
       description: titulo.trim(),
       descripcion: descripcion.trim() || titulo.trim(),
       prioridad,
-      sprint,
+      sprint: parseInt(sprint.replace('Sprint ', ''), 10),
       taskId,
       fechaLimite: fechaLimite ? `${fechaLimite}T18:00:00Z` : null,
       horasEstimadas: horasEstimadas ? parseFloat(horasEstimadas) : 0,
