@@ -191,7 +191,7 @@ java \
   -jar target/MyTodoList-0.0.1-SNAPSHOT.jar
 ```
 
-The app starts at **http://localhost:9090** (port set in `application-local.properties`).
+The app starts at **http://159.54.154.150/** (port set in `application-local.properties`).
 
 Swagger UI is available at: **http://localhost:9090/swagger-ui/index.html**
 
