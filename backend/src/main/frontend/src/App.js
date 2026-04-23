@@ -19,6 +19,83 @@ import KPIDashboard from './components/Kpidashboard';
 
 const PRIORITY_ORDER = { alta: 3, media: 2, baja: 1 };
 const TASK_ID_STORAGE = 'coqui_task_ids';
+const MOCK_TASKS = [
+  {
+    id: 71,
+    taskId: 'S1-019',
+    description: 'Daniel López 6am a 2pm centro de México',
+    descripcion: '',
+    prioridad: 'media',
+    estado: 'pendiente',
+    done: false,
+    createdAt: '2026-04-20T08:30:00Z',
+    fechaLimite: '2026-04-25T18:00:00Z',
+    horasEstimadas: 0,
+    horasReales: 0,
+    assignedUser: 'Coqui',
+    sprint: 'Sprint 1',
+  },
+  {
+    id: 46,
+    taskId: 'S1-018',
+    description: 'Validar KPIs con Oswaldo y preparar demo',
+    descripcion: 'Revision final de metricas y preparacion de presentacion',
+    prioridad: 'alta',
+    estado: 'completada',
+    done: true,
+    createdAt: '2026-04-18T14:00:00Z',
+    fechaLimite: '2026-04-21T18:00:00Z',
+    horasEstimadas: 4,
+    horasReales: 5,
+    assignedUser: 'Emilio',
+    sprint: 'Sprint 1',
+  },
+  {
+    id: 43,
+    taskId: 'S1-017',
+    description: 'Documentar evidencias de pruebas',
+    descripcion: 'Capturas, logs y reporte final de QA',
+    prioridad: 'media',
+    estado: 'completada',
+    done: true,
+    createdAt: '2026-04-17T12:00:00Z',
+    fechaLimite: '2026-04-19T18:00:00Z',
+    horasEstimadas: 4,
+    horasReales: 5,
+    assignedUser: 'Fernanda',
+    sprint: 'Sprint 1',
+  },
+  {
+    id: 36,
+    taskId: 'S1-016',
+    description: 'Monitorear logs y estabilidad en OKE',
+    descripcion: 'Revision de pods, restarts y conexion ATP',
+    prioridad: 'media',
+    estado: 'completada',
+    done: true,
+    createdAt: '2026-04-16T10:00:00Z',
+    fechaLimite: '2026-04-18T18:00:00Z',
+    horasEstimadas: 3,
+    horasReales: 4,
+    assignedUser: 'Esteban',
+    sprint: 'Sprint 1',
+  },
+  {
+    id: 40,
+    taskId: 'S1-015',
+    description: 'Documentar API con SpringDoc OpenAPI',
+    descripcion: 'Reemplazar definicion legacy y validar Swagger UI',
+    prioridad: 'media',
+    estado: 'completada',
+    done: true,
+    createdAt: '2026-04-15T09:00:00Z',
+    fechaLimite: '2026-04-17T18:00:00Z',
+    horasEstimadas: 3,
+    horasReales: 4,
+    assignedUser: 'Juan',
+    sprint: 'Sprint 1',
+  },
+];
 
 function loadTaskIds() {
   try { return JSON.parse(localStorage.getItem(TASK_ID_STORAGE) || '{}'); } catch { return {}; }
@@ -32,6 +109,7 @@ function saveTaskId(id, taskId) {
 function App() {
   const [isLoading, setLoading] = useState(false);
   const [isInserting, setInserting] = useState(false);
+  const [isPreviewMode, setPreviewMode] = useState(false);
   const [items, setItems] = useState([]);
   const [activityLog, setActivityLog] = useState([]);
   const [selectedTask, setSelectedTask] = useState(null);
@@ -147,6 +225,12 @@ function App() {
   }, [normalizedTasks]);
 
   function deleteItem(deleteId) {
+    if (isPreviewMode) {
+      setItems(prev => prev.filter(x => x.id !== deleteId));
+      recordActivity(`Tarea #${deleteId} eliminada en preview local`, deleteId);
+      if (selectedTask && String(selectedTask.id) === String(deleteId)) { setTaskDetailOpen(false); setSelectedTask(null); }
+      return;
+    }
     fetch(API_LIST + '/' + deleteId, { method: 'DELETE' })
       .then(r => { if (r.ok) return r; throw new Error('Error al eliminar'); })
       .then(() => {
@@ -159,6 +243,18 @@ function App() {
 
   function toggleDone(event, id, description, done, realHours) {
     event.preventDefault();
+    if (isPreviewMode) {
+      setItems(prev => prev.map(x => String(x.id) === String(id)
+        ? {
+            ...x,
+            done,
+            estado: done ? 'completada' : 'pendiente',
+            horasReales: done && realHours != null ? realHours : (done ? x.horasReales : 0),
+          }
+        : x));
+      recordActivity(`Tarea #${id} marcada como ${done ? 'completada' : 'pendiente'} en preview local`, id);
+      return;
+    }
     const data = { description, done };
     if (done && realHours != null) data.horasReales = realHours;
     fetch(API_LIST + '/' + id, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
@@ -176,13 +272,52 @@ function App() {
     setLoading(true);
     fetch(API_LIST)
       .then(r => { if (r.ok) return r.json(); throw new Error('Error al cargar tareas'); })
-      .then(result => { setLoading(false); setItems(result); recordActivity('Tareas sincronizadas'); })
-      .catch(err => { setLoading(false); setError(err); });
+      .then(result => {
+        setLoading(false);
+        setPreviewMode(false);
+        setError(undefined);
+        setItems(result);
+        recordActivity('Tareas sincronizadas');
+      })
+      .catch(() => {
+        setLoading(false);
+        setPreviewMode(true);
+        setError(undefined);
+        setItems(MOCK_TASKS);
+        recordActivity('Preview local activado con tareas mock');
+      });
   }, []);
 
   function addItem(taskData) {
     setInserting(true);
     const payload = typeof taskData === 'string' ? { description: taskData, done: false } : taskData;
+    if (isPreviewMode) {
+      const nextId = Date.now();
+      const newItem = {
+        id: nextId,
+        taskId: payload.taskId || null,
+        titulo: payload.titulo,
+        description: payload.description || payload.titulo,
+        descripcion: payload.descripcion,
+        prioridad: payload.prioridad || 'media',
+        estado: 'pendiente',
+        done: false,
+        createdAt: new Date().toISOString(),
+        fechaLimite: payload.fechaLimite || null,
+        horasEstimadas: payload.horasEstimadas || 0,
+        horasReales: 0,
+        assignedUser: payload.assignedUser || null,
+        sprint: payload.sprint || null,
+      };
+      if (payload.taskId) {
+        saveTaskId(nextId, payload.taskId);
+        setTaskIdMap(prev => ({ ...prev, [String(nextId)]: payload.taskId }));
+      }
+      setItems(prev => [newItem, ...prev]);
+      setInserting(false);
+      recordActivity(`Tarea ${payload.taskId || '#' + nextId} creada en preview local`, nextId);
+      return;
+    }
     fetch(API_LIST, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
       .then(r => { if (r.ok) return r; throw new Error('Error al crear tarea'); })
       .then(result => {
