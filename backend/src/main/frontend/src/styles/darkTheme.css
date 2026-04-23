@@ -417,9 +417,10 @@ body {
   background: var(--surface-secondary);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
-  overflow: hidden;
   margin-bottom: var(--spacing-lg);
-  overflow-x: auto;
+  max-height: min(62vh, 760px);
+  overflow: auto;
+  overscroll-behavior: contain;
 }
 
 .tasks-table {
@@ -439,6 +440,9 @@ body {
   color: var(--text-tertiary);
   border-bottom: 1px solid var(--border-default);
   white-space: nowrap;
+  position: sticky;
+  top: 0;
+  z-index: 2;
 }
 
 .tasks-table td {
