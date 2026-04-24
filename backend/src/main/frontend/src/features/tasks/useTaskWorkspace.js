@@ -338,6 +338,55 @@ export default function useTaskWorkspace(options = {}) {
       .catch((err) => setError(err));
   }
 
+  function updateTaskDetails(id, payload) {
+    const normalizedPayload = {
+      description: payload.title,
+      assignedUser: payload.assignedUser,
+      horasEstimadas: payload.estimatedHours != null && payload.estimatedHours !== ''
+        ? parseFloat(payload.estimatedHours)
+        : undefined,
+    };
+
+    if (isPreviewMode) {
+      const updatedItem = items.find((item) => String(item.id) === String(id));
+      const nextItem = {
+        ...updatedItem,
+        titulo: normalizedPayload.description,
+        description: normalizedPayload.description,
+        assignedUser: normalizedPayload.assignedUser,
+        horasEstimadas: normalizedPayload.horasEstimadas ?? updatedItem?.horasEstimadas ?? 0,
+      };
+
+      setItems((prev) => prev.map((item) => (String(item.id) === String(id) ? nextItem : item)));
+      setSelectedTask((prev) => (prev && String(prev.id) === String(id) ? normalizeTask(taskIdMap, nextItem) : prev));
+      recordActivity(`Tarea #${id} actualizada en preview local`, id);
+      return Promise.resolve(normalizeTask(taskIdMap, nextItem));
+    }
+
+    return fetch(`${API_LIST}/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(normalizedPayload),
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error('Error al guardar cambios');
+        return response.json();
+      })
+      .then((updatedItem) => {
+        setItems((prev) => prev.map((item) => (String(item.id) === String(id)
+          ? { ...item, ...updatedItem }
+          : item)));
+        const normalized = normalizeTask(taskIdMap, updatedItem);
+        setSelectedTask((prev) => (prev && String(prev.id) === String(id) ? normalized : prev));
+        recordActivity(`Tarea #${id} actualizada`, id);
+        return normalized;
+      })
+      .catch((err) => {
+        setError(err);
+        throw err;
+      });
+  }
+
   const loadTasks = useCallback(() => {
     setLoading(true);
     fetch(endpoint)
@@ -487,6 +536,7 @@ export default function useTaskWorkspace(options = {}) {
     addItem,
     deleteItem,
     toggleDone,
+    updateTaskDetails,
     handleFilterChange,
     resetFilters,
     openTaskDetails,

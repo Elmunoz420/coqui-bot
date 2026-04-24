@@ -42,6 +42,7 @@ function AdminDashboard() {
     addItem,
     deleteItem,
     toggleDone,
+    updateTaskDetails,
     handleFilterChange,
     resetFilters,
     openTaskDetails,
@@ -278,6 +279,9 @@ function AdminDashboard() {
         open={isTaskDetailOpen}
         onClose={closeTaskDetails}
         task={selectedTask}
+        onSaveTask={updateTaskDetails}
+        canEdit
+        developerOptions={developerOptions.filter((option) => option !== 'All')}
       />
     </WorkspaceShell>
   );

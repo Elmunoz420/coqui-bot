@@ -18,7 +18,10 @@
     },
     "scripts": {
         "start": "react-scripts start",
-        "build": "react-scripts build"
+        "build": "react-scripts build",
+        "test": "react-scripts test",
+        "test:run": "react-scripts test --watchAll=false",
+        "test:coverage": "react-scripts test --watchAll=false --coverage --verbose"
     },
     "eslintConfig": {
         "extends": "react-app"
@@ -26,5 +29,9 @@
     "browserslist": [
         "last 5 versions"
     ],
-    "homepage": "."
+    "homepage": ".",
+    "devDependencies": {
+        "@testing-library/react": "^12.1.5",
+        "@testing-library/user-event": "^13.5.0"
+    }
 }

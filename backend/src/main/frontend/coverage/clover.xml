@@ -1,0 +1,497 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1777065453252" clover="3.2.0">
+  <project timestamp="1777065453252" name="All files">
+    <metrics statements="449" coveredstatements="300" conditionals="496" coveredconditionals="252" methods="208" coveredmethods="139" elements="1153" coveredelements="691" complexity="0" loc="449" ncloc="449" packages="5" files="9" classes="9"/>
+    <package name="app.auth">
+      <metrics statements="4" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
+      <file name="useAuth.js" path="/Users/fjimenez/Documents/6to/coqui-bot/backend/src/main/frontend/src/app/auth/useAuth.js">
+        <metrics statements="4" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="5" count="0" type="stmt"/>
+        <line num="6" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="7" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="app.router">
+      <metrics statements="7" coveredstatements="6" conditionals="8" coveredconditionals="6" methods="2" coveredmethods="2"/>
+      <file name="ProtectedRoute.js" path="/Users/fjimenez/Documents/6to/coqui-bot/backend/src/main/frontend/src/app/router/ProtectedRoute.js">
+        <metrics statements="7" coveredstatements="6" conditionals="8" coveredconditionals="6" methods="2" coveredmethods="2"/>
+        <line num="6" count="2" type="stmt"/>
+        <line num="8" count="2" type="stmt"/>
+        <line num="12" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="16" count="1" type="cond" truecount="3" falsecount="1"/>
+        <line num="17" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="20" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="components">
+      <metrics statements="172" coveredstatements="149" conditionals="182" coveredconditionals="133" methods="76" coveredmethods="70"/>
+      <file name="Kpidashboard.js" path="/Users/fjimenez/Documents/6to/coqui-bot/backend/src/main/frontend/src/components/Kpidashboard.js">
+        <metrics statements="115" coveredstatements="102" conditionals="88" coveredconditionals="63" methods="46" coveredmethods="45"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="35" count="20" type="cond" truecount="2" falsecount="0"/>
+        <line num="36" count="2" type="stmt"/>
+        <line num="37" count="2" type="stmt"/>
+        <line num="38" count="2" type="stmt"/>
+        <line num="39" count="2" type="stmt"/>
+        <line num="40" count="2" type="stmt"/>
+        <line num="41" count="2" type="stmt"/>
+        <line num="42" count="2" type="stmt"/>
+        <line num="45" count="37" type="cond" truecount="2" falsecount="0"/>
+        <line num="46" count="18" type="cond" truecount="2" falsecount="0"/>
+        <line num="49" count="2" type="stmt"/>
+        <line num="57" count="7" type="stmt"/>
+        <line num="69" count="10" type="stmt"/>
+        <line num="70" count="10" type="stmt"/>
+        <line num="71" count="10" type="stmt"/>
+        <line num="84" count="7" type="stmt"/>
+        <line num="85" count="7" type="stmt"/>
+        <line num="88" count="20" type="cond" truecount="2" falsecount="0"/>
+        <line num="89" count="20" type="cond" truecount="1" falsecount="1"/>
+        <line num="90" count="20" type="stmt"/>
+        <line num="91" count="20" type="stmt"/>
+        <line num="92" count="20" type="stmt"/>
+        <line num="123" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="124" count="1" type="stmt"/>
+        <line num="125" count="1" type="stmt"/>
+        <line num="126" count="1" type="stmt"/>
+        <line num="127" count="1" type="stmt"/>
+        <line num="130" count="14" type="cond" truecount="1" falsecount="1"/>
+        <line num="131" count="14" type="stmt"/>
+        <line num="133" count="12" type="stmt"/>
+        <line num="135" count="1" type="stmt"/>
+        <line num="143" count="3" type="stmt"/>
+        <line num="154" count="5" type="stmt"/>
+        <line num="155" count="5" type="stmt"/>
+        <line num="170" count="3" type="cond" truecount="4" falsecount="0"/>
+        <line num="171" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="172" count="3" type="stmt"/>
+        <line num="173" count="3" type="stmt"/>
+        <line num="177" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="178" count="6" type="stmt"/>
+        <line num="191" count="2" type="stmt"/>
+        <line num="201" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="202" count="3" type="stmt"/>
+        <line num="203" count="3" type="stmt"/>
+        <line num="205" count="3" type="stmt"/>
+        <line num="206" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="207" count="0" type="stmt"/>
+        <line num="208" count="0" type="stmt"/>
+        <line num="209" count="0" type="stmt"/>
+        <line num="210" count="0" type="stmt"/>
+        <line num="213" count="1" type="stmt"/>
+        <line num="214" count="1" type="stmt"/>
+        <line num="216" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="217" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="218" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="219" count="0" type="stmt"/>
+        <line num="221" count="1" type="stmt"/>
+        <line num="224" count="1" type="stmt"/>
+        <line num="225" count="1" type="stmt"/>
+        <line num="228" count="0" type="stmt"/>
+        <line num="229" count="0" type="stmt"/>
+        <line num="230" count="0" type="stmt"/>
+        <line num="234" count="3" type="stmt"/>
+        <line num="236" count="55" type="cond" truecount="1" falsecount="1"/>
+        <line num="237" count="55" type="stmt"/>
+        <line num="238" count="180" type="cond" truecount="2" falsecount="0"/>
+        <line num="240" count="0" type="stmt"/>
+        <line num="244" count="108" type="cond" truecount="1" falsecount="1"/>
+        <line num="245" count="108" type="stmt"/>
+        <line num="246" count="108" type="cond" truecount="1" falsecount="1"/>
+        <line num="247" count="108" type="cond" truecount="1" falsecount="1"/>
+        <line num="249" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="250" count="0" type="stmt"/>
+        <line num="251" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="253" count="0" type="stmt"/>
+        <line num="257" count="2" type="stmt"/>
+        <line num="258" count="20" type="stmt"/>
+        <line num="260" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="264" count="2" type="stmt"/>
+        <line num="265" count="8" type="cond" truecount="2" falsecount="0"/>
+        <line num="266" count="3" type="stmt"/>
+        <line num="267" count="3" type="stmt"/>
+        <line num="268" count="15" type="stmt"/>
+        <line num="270" count="3" type="stmt"/>
+        <line num="274" count="2" type="stmt"/>
+        <line num="275" count="10" type="stmt"/>
+        <line num="276" count="10" type="stmt"/>
+        <line num="277" count="15" type="stmt"/>
+        <line num="278" count="40" type="cond" truecount="2" falsecount="0"/>
+        <line num="279" count="4" type="cond" truecount="1" falsecount="1"/>
+        <line num="280" count="15" type="stmt"/>
+        <line num="282" count="10" type="stmt"/>
+        <line num="285" count="2" type="stmt"/>
+        <line num="286" count="13" type="stmt"/>
+        <line num="291" count="2" type="stmt"/>
+        <line num="292" count="10" type="stmt"/>
+        <line num="293" count="10" type="stmt"/>
+        <line num="294" count="15" type="stmt"/>
+        <line num="295" count="40" type="cond" truecount="2" falsecount="0"/>
+        <line num="296" count="4" type="cond" truecount="1" falsecount="1"/>
+        <line num="297" count="15" type="stmt"/>
+        <line num="299" count="10" type="stmt"/>
+        <line num="303" count="4" type="cond" truecount="1" falsecount="1"/>
+        <line num="304" count="2" type="stmt"/>
+        <line num="305" count="4" type="stmt"/>
+        <line num="307" count="2" type="stmt"/>
+        <line num="310" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="311" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="313" count="1" type="stmt"/>
+      </file>
+      <file name="TaskDetailDrawer.js" path="/Users/fjimenez/Documents/6to/coqui-bot/backend/src/main/frontend/src/components/TaskDetailDrawer.js">
+        <metrics statements="34" coveredstatements="28" conditionals="48" coveredconditionals="33" methods="16" coveredmethods="15"/>
+        <line num="9" count="8" type="cond" truecount="1" falsecount="1"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="12" count="8" type="stmt"/>
+        <line num="13" count="8" type="cond" truecount="1" falsecount="1"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="16" count="8" type="stmt"/>
+        <line num="20" count="32" type="stmt"/>
+        <line num="29" count="46" type="stmt"/>
+        <line num="30" count="46" type="stmt"/>
+        <line num="31" count="46" type="stmt"/>
+        <line num="33" count="46" type="stmt"/>
+        <line num="34" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="35" count="1" type="stmt"/>
+        <line num="40" count="1" type="stmt"/>
+        <line num="41" count="1" type="stmt"/>
+        <line num="44" count="46" type="cond" truecount="2" falsecount="0"/>
+        <line num="45" count="8" type="stmt"/>
+        <line num="49" count="32" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="62" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="63" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="66" count="1" type="stmt"/>
+        <line num="67" count="1" type="stmt"/>
+        <line num="69" count="1" type="stmt"/>
+        <line num="72" count="1" type="stmt"/>
+        <line num="76" count="38" type="stmt"/>
+        <line num="89" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="107" count="29" type="stmt"/>
+        <line num="115" count="1" type="stmt"/>
+        <line num="118" count="102" type="cond" truecount="2" falsecount="0"/>
+        <line num="120" count="68" type="stmt"/>
+        <line num="132" count="2" type="stmt"/>
+      </file>
+      <file name="TaskTable.js" path="/Users/fjimenez/Documents/6to/coqui-bot/backend/src/main/frontend/src/components/TaskTable.js">
+        <metrics statements="23" coveredstatements="19" conditionals="46" coveredconditionals="37" methods="14" coveredmethods="10"/>
+        <line num="6" count="4" type="cond" truecount="1" falsecount="1"/>
+        <line num="7" count="4" type="stmt"/>
+        <line num="8" count="4" type="cond" truecount="1" falsecount="1"/>
+        <line num="9" count="4" type="stmt"/>
+        <line num="13" count="4" type="stmt"/>
+        <line num="14" count="4" type="stmt"/>
+        <line num="44" count="3" type="stmt"/>
+        <line num="59" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="71" count="5" type="stmt"/>
+        <line num="74" count="1" type="stmt"/>
+        <line num="75" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="76" count="0" type="stmt"/>
+        <line num="80" count="1" type="stmt"/>
+        <line num="81" count="1" type="stmt"/>
+        <line num="84" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="85" count="1" type="stmt"/>
+        <line num="93" count="4" type="stmt"/>
+        <line num="96" count="0" type="stmt"/>
+        <line num="116" count="4" type="stmt"/>
+        <line num="131" count="0" type="stmt"/>
+        <line num="155" count="4" type="stmt"/>
+        <line num="170" count="1" type="stmt"/>
+        <line num="174" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="features.tasks">
+      <metrics statements="193" coveredstatements="92" conditionals="226" coveredconditionals="59" methods="75" coveredmethods="35"/>
+      <file name="useTaskWorkspace.js" path="/Users/fjimenez/Documents/6to/coqui-bot/backend/src/main/frontend/src/features/tasks/useTaskWorkspace.js">
+        <metrics statements="193" coveredstatements="92" conditionals="226" coveredconditionals="59" methods="75" coveredmethods="35"/>
+        <line num="4" count="5" type="stmt"/>
+        <line num="5" count="5" type="stmt"/>
+        <line num="7" count="5" type="stmt"/>
+        <line num="86" count="1" type="stmt"/>
+        <line num="87" count="1" type="cond" truecount="2" falsecount="0"/>
+        <line num="89" count="0" type="stmt"/>
+        <line num="94" count="0" type="stmt"/>
+        <line num="95" count="0" type="stmt"/>
+        <line num="96" count="0" type="stmt"/>
+        <line num="97" count="0" type="stmt"/>
+        <line num="102" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="106" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="107" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="111" count="2" type="stmt"/>
+        <line num="112" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="113" count="2" type="stmt"/>
+        <line num="115" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="116" count="0" type="stmt"/>
+        <line num="118" count="2" type="stmt"/>
+        <line num="122" count="2" type="stmt"/>
+        <line num="123" count="2" type="cond" truecount="1" falsecount="2"/>
+        <line num="124" count="2" type="cond" truecount="1" falsecount="3"/>
+        <line num="126" count="2" type="stmt"/>
+        <line num="148" count="6" type="stmt"/>
+        <line num="149" count="7" type="stmt"/>
+        <line num="150" count="7" type="stmt"/>
+        <line num="151" count="6" type="stmt"/>
+        <line num="152" count="6" type="stmt"/>
+        <line num="153" count="7" type="cond" truecount="4" falsecount="0"/>
+        <line num="154" count="5" type="stmt"/>
+        <line num="155" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="158" count="6" type="stmt"/>
+        <line num="162" count="4" type="cond" truecount="1" falsecount="1"/>
+        <line num="164" count="4" type="stmt"/>
+        <line num="170" count="12" type="stmt"/>
+        <line num="172" count="4" type="stmt"/>
+        <line num="173" count="6" type="cond" truecount="1" falsecount="1"/>
+        <line num="174" count="6" type="stmt"/>
+        <line num="176" count="6" type="stmt"/>
+        <line num="177" count="8" type="cond" truecount="3" falsecount="0"/>
+        <line num="184" count="6" type="stmt"/>
+        <line num="185" count="6" type="stmt"/>
+        <line num="186" count="6" type="stmt"/>
+        <line num="187" count="6" type="stmt"/>
+        <line num="188" count="6" type="stmt"/>
+        <line num="189" count="6" type="stmt"/>
+        <line num="190" count="6" type="stmt"/>
+        <line num="191" count="6" type="stmt"/>
+        <line num="192" count="6" type="stmt"/>
+        <line num="193" count="6" type="stmt"/>
+        <line num="194" count="6" type="stmt"/>
+        <line num="203" count="6" type="stmt"/>
+        <line num="205" count="6" type="stmt"/>
+        <line num="206" count="1" type="stmt"/>
+        <line num="212" count="6" type="stmt"/>
+        <line num="213" count="2" type="stmt"/>
+        <line num="217" count="6" type="stmt"/>
+        <line num="218" count="6" type="stmt"/>
+        <line num="220" count="6" type="stmt"/>
+        <line num="221" count="2" type="stmt"/>
+        <line num="222" count="2" type="stmt"/>
+        <line num="223" count="2" type="cond" truecount="3" falsecount="1"/>
+        <line num="224" count="2" type="stmt"/>
+        <line num="225" count="2" type="stmt"/>
+        <line num="226" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="230" count="2" type="stmt"/>
+        <line num="233" count="6" type="stmt"/>
+        <line num="234" count="2" type="stmt"/>
+        <line num="235" count="2" type="stmt"/>
+        <line num="236" count="2" type="stmt"/>
+        <line num="237" count="2" type="cond" truecount="1" falsecount="2"/>
+        <line num="238" count="2" type="cond" truecount="1" falsecount="3"/>
+        <line num="239" count="2" type="cond" truecount="1" falsecount="3"/>
+        <line num="240" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="241" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="242" count="2" type="cond" truecount="1" falsecount="2"/>
+        <line num="243" count="0" type="stmt"/>
+        <line num="244" count="2" type="cond" truecount="6" falsecount="0"/>
+        <line num="247" count="2" type="stmt"/>
+        <line num="248" count="2" type="stmt"/>
+        <line num="251" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="252" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="253" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="254" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="255" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="256" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="257" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="258" count="0" type="stmt"/>
+        <line num="259" count="0" type="stmt"/>
+        <line num="260" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="261" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="262" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="264" count="0" type="stmt"/>
+        <line num="267" count="1" type="cond" truecount="1" falsecount="3"/>
+        <line num="268" count="1" type="cond" truecount="1" falsecount="3"/>
+        <line num="269" count="1" type="stmt"/>
+        <line num="272" count="2" type="stmt"/>
+        <line num="275" count="6" type="stmt"/>
+        <line num="278" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="279" count="0" type="stmt"/>
+        <line num="280" count="0" type="stmt"/>
+        <line num="281" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="282" count="0" type="stmt"/>
+        <line num="283" count="0" type="stmt"/>
+        <line num="285" count="0" type="stmt"/>
+        <line num="288" count="0" type="stmt"/>
+        <line num="290" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="291" count="0" type="stmt"/>
+        <line num="294" count="0" type="stmt"/>
+        <line num="295" count="0" type="stmt"/>
+        <line num="296" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="297" count="0" type="stmt"/>
+        <line num="298" count="0" type="stmt"/>
+        <line num="301" count="0" type="stmt"/>
+        <line num="305" count="0" type="stmt"/>
+        <line num="307" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="308" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="316" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="317" count="0" type="stmt"/>
+        <line num="320" count="0" type="stmt"/>
+        <line num="321" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="323" count="0" type="stmt"/>
+        <line num="329" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="330" count="0" type="stmt"/>
+        <line num="333" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="336" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="338" count="0" type="stmt"/>
+        <line num="342" count="0" type="stmt"/>
+        <line num="350" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="351" count="0" type="stmt"/>
+        <line num="352" count="0" type="stmt"/>
+        <line num="360" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="361" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="362" count="0" type="stmt"/>
+        <line num="363" count="0" type="stmt"/>
+        <line num="366" count="0" type="stmt"/>
+        <line num="372" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="373" count="0" type="stmt"/>
+        <line num="376" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="379" count="0" type="stmt"/>
+        <line num="380" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="381" count="0" type="stmt"/>
+        <line num="382" count="0" type="stmt"/>
+        <line num="385" count="0" type="stmt"/>
+        <line num="386" count="0" type="stmt"/>
+        <line num="390" count="6" type="stmt"/>
+        <line num="391" count="1" type="stmt"/>
+        <line num="392" count="1" type="stmt"/>
+        <line num="394" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="395" count="0" type="stmt"/>
+        <line num="398" count="1" type="stmt"/>
+        <line num="399" count="1" type="stmt"/>
+        <line num="400" count="1" type="stmt"/>
+        <line num="401" count="1" type="stmt"/>
+        <line num="402" count="1" type="stmt"/>
+        <line num="405" count="0" type="stmt"/>
+        <line num="406" count="0" type="stmt"/>
+        <line num="407" count="0" type="stmt"/>
+        <line num="408" count="0" type="stmt"/>
+        <line num="409" count="0" type="stmt"/>
+        <line num="413" count="6" type="stmt"/>
+        <line num="414" count="1" type="stmt"/>
+        <line num="418" count="0" type="stmt"/>
+        <line num="419" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="421" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="422" count="0" type="stmt"/>
+        <line num="423" count="0" type="stmt"/>
+        <line num="440" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="441" count="0" type="stmt"/>
+        <line num="442" count="0" type="stmt"/>
+        <line num="445" count="0" type="stmt"/>
+        <line num="446" count="0" type="stmt"/>
+        <line num="447" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="448" count="0" type="stmt"/>
+        <line num="451" count="0" type="stmt"/>
+        <line num="457" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="458" count="0" type="stmt"/>
+        <line num="461" count="0" type="stmt"/>
+        <line num="462" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="463" count="0" type="stmt"/>
+        <line num="464" count="0" type="stmt"/>
+        <line num="467" count="0" type="stmt"/>
+        <line num="484" count="0" type="stmt"/>
+        <line num="485" count="0" type="stmt"/>
+        <line num="486" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="489" count="0" type="stmt"/>
+        <line num="490" count="0" type="stmt"/>
+        <line num="495" count="0" type="stmt"/>
+        <line num="499" count="0" type="stmt"/>
+        <line num="511" count="0" type="stmt"/>
+        <line num="512" count="0" type="stmt"/>
+        <line num="516" count="0" type="stmt"/>
+        <line num="519" count="6" type="stmt"/>
+      </file>
+    </package>
+    <package name="pages">
+      <metrics statements="73" coveredstatements="53" conditionals="78" coveredconditionals="54" methods="54" coveredmethods="32"/>
+      <file name="AdminDashboard.js" path="/Users/fjimenez/Documents/6to/coqui-bot/backend/src/main/frontend/src/pages/AdminDashboard.js">
+        <metrics statements="35" coveredstatements="23" conditionals="30" coveredconditionals="21" methods="22" coveredmethods="10"/>
+        <line num="24" count="2" type="stmt"/>
+        <line num="28" count="2" type="stmt"/>
+        <line num="50" count="2" type="stmt"/>
+        <line num="52" count="2" type="stmt"/>
+        <line num="59" count="2" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="62" count="1" type="stmt"/>
+        <line num="63" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="68" count="2" type="stmt"/>
+        <line num="69" count="1" type="stmt"/>
+        <line num="70" count="1" type="stmt"/>
+        <line num="71" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="72" count="1" type="cond" truecount="2" falsecount="0"/>
+        <line num="74" count="1" type="stmt"/>
+        <line num="77" count="2" type="stmt"/>
+        <line num="78" count="1" type="stmt"/>
+        <line num="79" count="1" type="stmt"/>
+        <line num="80" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="81" count="1" type="cond" truecount="2" falsecount="0"/>
+        <line num="83" count="1" type="stmt"/>
+        <line num="86" count="6" type="stmt"/>
+        <line num="101" count="2" type="stmt"/>
+        <line num="119" count="0" type="stmt"/>
+        <line num="136" count="0" type="stmt"/>
+        <line num="140" count="0" type="stmt"/>
+        <line num="144" count="0" type="stmt"/>
+        <line num="171" count="1" type="stmt"/>
+        <line num="182" count="1" type="stmt"/>
+        <line num="201" count="0" type="stmt"/>
+        <line num="244" count="0" type="stmt"/>
+        <line num="258" count="0" type="stmt"/>
+        <line num="284" count="6" type="stmt"/>
+      </file>
+      <file name="DeveloperDashboard.js" path="/Users/fjimenez/Documents/6to/coqui-bot/backend/src/main/frontend/src/pages/DeveloperDashboard.js">
+        <metrics statements="32" coveredstatements="24" conditionals="44" coveredconditionals="29" methods="29" coveredmethods="19"/>
+        <line num="21" count="9" type="stmt"/>
+        <line num="22" count="9" type="stmt"/>
+        <line num="32" count="9" type="stmt"/>
+        <line num="36" count="9" type="stmt"/>
+        <line num="37" count="9" type="stmt"/>
+        <line num="39" count="9" type="stmt"/>
+        <line num="41" count="9" type="stmt"/>
+        <line num="42" count="9" type="cond" truecount="2" falsecount="0"/>
+        <line num="43" count="9" type="stmt"/>
+        <line num="44" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="47" count="9" type="cond" truecount="2" falsecount="0"/>
+        <line num="48" count="9" type="stmt"/>
+        <line num="49" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="52" count="9" type="stmt"/>
+        <line num="53" count="4" type="stmt"/>
+        <line num="54" count="5" type="stmt"/>
+        <line num="55" count="2" type="stmt"/>
+        <line num="60" count="9" type="stmt"/>
+        <line num="67" count="9" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="72" count="1" type="stmt"/>
+        <line num="75" count="9" type="stmt"/>
+        <line num="130" count="6" type="stmt"/>
+        <line num="144" count="0" type="stmt"/>
+        <line num="162" count="2" type="stmt"/>
+        <line num="184" count="6" type="stmt"/>
+        <line num="211" count="0" type="stmt"/>
+        <line num="231" count="0" type="stmt"/>
+        <line num="245" count="0" type="stmt"/>
+      </file>
+      <file name="LoginPage.js" path="/Users/fjimenez/Documents/6to/coqui-bot/backend/src/main/frontend/src/pages/LoginPage.js">
+        <metrics statements="6" coveredstatements="6" conditionals="4" coveredconditionals="4" methods="3" coveredmethods="3"/>
+        <line num="10" count="5" type="stmt"/>
+        <line num="12" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="13" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="16" count="3" type="stmt"/>
+        <line num="48" count="1" type="stmt"/>
+        <line num="55" count="1" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>
