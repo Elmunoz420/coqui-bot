@@ -13,4 +13,6 @@ import java.util.Optional;
 @EnableTransactionManagement
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     Optional<Usuario> findByUsername(String username);
+    Optional<Usuario> findByUsernameIgnoreCase(String username);
+    Optional<Usuario> findByNombreIgnoreCase(String nombre);
 }

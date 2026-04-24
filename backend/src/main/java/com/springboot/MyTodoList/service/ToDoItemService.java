@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import jakarta.annotation.PostConstruct;
 import java.time.OffsetDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -44,7 +45,7 @@ public class ToDoItemService {
      */
     @PostConstruct
     public void initDefaults() {
-        usuarioPorDefecto = usuarioRepository.findByUsername("coqui_bot_user")
+        usuarioPorDefecto = usuarioRepository.findByUsernameIgnoreCase("coqui_bot_user")
             .orElseGet(() -> {
                 Usuario u = new Usuario();
                 u.setNombre("Coqui Bot User");
@@ -63,6 +64,28 @@ public class ToDoItemService {
                 p.setEstado("activo");
                 p.setFechaCreacion(OffsetDateTime.now());
                 return proyectoRepository.save(p);
+            });
+
+        Arrays.asList(
+            new String[] { "fernanda.admin", "Fernanda Jiménez", "admin" },
+            new String[] { "fernanda", "Fernanda Jiménez", "developer" },
+            new String[] { "joaquin", "Joaquín Hiroki", "developer" },
+            new String[] { "esteban", "Esteban Muñoz", "developer" },
+            new String[] { "juanpablo", "Juan Pablo Buenrostro", "developer" },
+            new String[] { "emilio", "Emilio Pardo", "developer" }
+        ).forEach(seed -> ensureUser(seed[0], seed[1], seed[2]));
+    }
+
+    private Usuario ensureUser(String username, String nombre, String rol) {
+        return usuarioRepository.findByUsernameIgnoreCase(username)
+            .orElseGet(() -> {
+                Usuario user = new Usuario();
+                user.setUsername(username);
+                user.setNombre(nombre);
+                user.setRol(rol);
+                user.setEstado("activo");
+                user.setFechaRegistro(OffsetDateTime.now());
+                return usuarioRepository.save(user);
             });
     }
 
@@ -111,6 +134,9 @@ public class ToDoItemService {
         if (td.getSprint() != null) {
             tarea.setSprint(td.getSprint());
         }
+        if (td.getAssignedUser() != null && !td.getAssignedUser().isBlank()) {
+            tarea.setUsuarioAsignado(resolveAssignedUser(td.getAssignedUser()));
+        }
         // Actualizar estado basado en done
         if (td.isDone()) {
             tarea.setEstado("completada");
@@ -123,12 +149,40 @@ public class ToDoItemService {
         }
     }
 
+    private Usuario resolveAssignedUser(String assignedUser) {
+        if (assignedUser == null || assignedUser.isBlank()) {
+            return usuarioPorDefecto;
+        }
+
+        String primaryValue = assignedUser.split(",")[0].trim();
+        return usuarioRepository.findByUsernameIgnoreCase(primaryValue)
+            .or(() -> usuarioRepository.findByNombreIgnoreCase(primaryValue))
+            .orElseGet(() -> {
+                String firstName = primaryValue.split(" ")[0].trim();
+                return usuarioRepository.findAll().stream()
+                    .filter(user -> user.getNombre() != null && user.getNombre().toLowerCase().startsWith(firstName.toLowerCase()))
+                    .findFirst()
+                    .orElse(usuarioPorDefecto);
+            });
+    }
+
     // ---- API pública (misma firma que antes) ----
 
     public List<ToDoItem> findAll() {
         return tareaRepository.findAll().stream()
                 .map(this::tareaToToDoItem)
                 .collect(Collectors.toList());
+    }
+
+    public List<ToDoItem> findAssignedToUsername(String username) {
+        return tareaRepository.findByUsuarioAsignado_UsernameIgnoreCase(username).stream()
+                .map(this::tareaToToDoItem)
+                .collect(Collectors.toList());
+    }
+
+    public Usuario getUserProfile(String username) {
+        return usuarioRepository.findByUsernameIgnoreCase(username)
+                .orElse(usuarioPorDefecto);
     }
 
     public ResponseEntity<ToDoItem> getItemById(int id) {
@@ -156,7 +210,7 @@ public class ToDoItemService {
         tarea.setHorasEstimadas(toDoItem.getHorasEstimadas() > 0 ? (double) toDoItem.getHorasEstimadas() : 0.0);
         tarea.setHorasReales(toDoItem.getHorasReales() >= 0 ? (double) toDoItem.getHorasReales() : 0.0);
         tarea.setSprint(toDoItem.getSprint());
-        tarea.setUsuarioAsignado(usuarioPorDefecto);
+        tarea.setUsuarioAsignado(resolveAssignedUser(toDoItem.getAssignedUser()));
         tarea.setProyecto(proyectoPorDefecto);
         Tarea saved = tareaRepository.save(tarea);
         return tareaToToDoItem(saved);

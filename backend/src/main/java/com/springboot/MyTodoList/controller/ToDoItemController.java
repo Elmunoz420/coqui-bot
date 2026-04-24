@@ -18,6 +18,14 @@ public class ToDoItemController {
     public List<ToDoItem> getAllToDoItems(){
         return toDoItemService.findAll();
     }
+
+    @GetMapping(value = "/todolist/my")
+    public List<ToDoItem> getAssignedToCurrentUser(
+        @RequestParam(value = "username", defaultValue = "fernanda") String username
+    ) {
+        return toDoItemService.findAssignedToUsername(username);
+    }
+
     //@CrossOrigin
     @GetMapping(value = "/todolist/{id}")
     public ResponseEntity<ToDoItem> getToDoItemById(@PathVariable int id){
