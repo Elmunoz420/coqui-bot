@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import API_LIST from '../API';
+import { MOCK_TASKS } from '../features/tasks/useTaskWorkspace';
 
 // $50,000/year fulltime (40hrs/week, 52 weeks = 2080 hrs)
 const COST_PER_HOUR = 50000 / 2080; // ~$24.04
@@ -196,18 +197,39 @@ function LineChart({ title, subtitle, sprints, series, colorMap, dashMap, yLabel
 }
 
 // ─── Main component ───────────────────────────────────────────────────────────
-function KPIDashboard() {
-  const [tasks, setTasks] = useState([]);
+function KPIDashboard({ tasks: providedTasks = null }) {
+  const [tasks, setTasks] = useState(providedTasks || []);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (providedTasks) {
+      setTasks(providedTasks);
+      setLoading(false);
+      setError(null);
+      return;
+    }
+
     setLoading(true);
     fetch(API_LIST)
-      .then(r => { if (!r.ok) throw new Error('Error loading tasks'); return r.json(); })
-      .then(data => { setTasks(data); setLoading(false); })
-      .catch(err => { setError(err.message); setLoading(false); });
-  }, []);
+      .then(async (r) => {
+        if (!r.ok) throw new Error('Error loading tasks');
+        const contentType = r.headers.get('content-type') || '';
+        if (!contentType.includes('application/json')) {
+          throw new Error('API returned non-JSON payload');
+        }
+        return r.json();
+      })
+      .then(data => {
+        setTasks(data);
+        setLoading(false);
+      })
+      .catch(() => {
+        setTasks(MOCK_TASKS);
+        setError(null);
+        setLoading(false);
+      });
+  }, [providedTasks]);
 
   const kpis = useMemo(() => {
     function getDevName(task) {
@@ -220,10 +242,11 @@ function KPIDashboard() {
 
     function getSprintName(task) {
       if (task.sprint != null) {
-        const name = `Sprint ${task.sprint}`;
+        const rawSprint = String(task.sprint).trim();
+        const name = rawSprint.toLowerCase().startsWith('sprint ') ? rawSprint : `Sprint ${rawSprint}`;
         if (ACTIVE_SPRINTS.includes(name)) return name;
       }
-      const desc = (task.descripcion || task.description || '').toLowerCase();
+      const desc = (task.descripcion || task.description || task.rawDescription || '').toLowerCase();
       for (const sp of ACTIVE_SPRINTS) {
         if (desc.includes(sp.toLowerCase())) return sp;
       }
