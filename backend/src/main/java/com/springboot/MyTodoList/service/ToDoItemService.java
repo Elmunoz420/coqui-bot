@@ -102,7 +102,7 @@ public class ToDoItemService {
         item.setFechaLimite(t.getFechaLimite());
         item.setHorasEstimadas(t.getHorasEstimadas() != null ? t.getHorasEstimadas() : 0.0);
         item.setHorasReales(t.getHorasReales() != null ? t.getHorasReales() : 0.0);
-        item.setSprint(t.getSprint());
+        item.setSprint(t.getSprint() != null ? "Sprint " + t.getSprint() : null);
         item.setAssignedUser(t.getUsuarioAsignado() != null ? t.getUsuarioAsignado().getNombre() : null);
 
         boolean done = "completada".equalsIgnoreCase(t.getEstado())
@@ -132,7 +132,7 @@ public class ToDoItemService {
             tarea.setHorasReales((double) td.getHorasReales());
         }
         if (td.getSprint() != null) {
-            tarea.setSprint(td.getSprint());
+            tarea.setSprint(parseSprint(td.getSprint()));
         }
         if (td.getAssignedUser() != null && !td.getAssignedUser().isBlank()) {
             tarea.setUsuarioAsignado(resolveAssignedUser(td.getAssignedUser()));
@@ -209,7 +209,7 @@ public class ToDoItemService {
         tarea.setFechaLimite(toDoItem.getFechaLimite());
         tarea.setHorasEstimadas(toDoItem.getHorasEstimadas() > 0 ? (double) toDoItem.getHorasEstimadas() : 0.0);
         tarea.setHorasReales(toDoItem.getHorasReales() >= 0 ? (double) toDoItem.getHorasReales() : 0.0);
-        tarea.setSprint(toDoItem.getSprint());
+        tarea.setSprint(parseSprint(toDoItem.getSprint()));
         tarea.setUsuarioAsignado(resolveAssignedUser(toDoItem.getAssignedUser()));
         tarea.setProyecto(proyectoPorDefecto);
         Tarea saved = tareaRepository.save(tarea);
@@ -236,4 +236,14 @@ public class ToDoItemService {
             return null;
         }
     }
+
+    private Integer parseSprint(String sprint) {
+        if (sprint == null) return null;
+        try {
+            return Integer.parseInt(sprint.replaceAll("[^0-9]", ""));
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 }

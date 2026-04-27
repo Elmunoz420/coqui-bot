@@ -6,7 +6,7 @@ metadata:
     oci.oraclecloud.com/loadbalancer-policy: "IP_HASH"
 spec:
   type: LoadBalancer
-  externalTrafficPolicy: Local
+  externalTrafficPolicy: Cluster
 
   ports:
     - port: 80
@@ -45,13 +45,13 @@ spec:
     spec:
       containers:
         - name: todolistapp-springboot
-          image: mx-queretaro-1.ocir.io/axmwzvmpn3zm/agileimage:0.1
+          image: mx-queretaro-1.ocir.io/axicfx7xkp0y/agileimage:0.1
           imagePullPolicy: Always
           env:
             - name: db_user
-              value: "ADMIN"
+              value: "COQUIBOT"
             - name: db_url
-              value: "jdbc:oracle:thin:@TASKBOTDB_tp?TNS_ADMIN=/mtdrworkshop/creds"
+              value: "jdbc:oracle:thin:@taskbotdb_tp?TNS_ADMIN=/mtdrworkshop/creds"
             - name: driver_class_name
               value: "oracle.jdbc.OracleDriver"
             - name: OCI_REGION
