@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -145,15 +145,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -183,14 +181,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -217,14 +217,14 @@ import CodeRoundedIcon from '@mui/icons-material/CodeRounded';
 import ShieldRoundedIcon from '@mui/icons-material/ShieldRounded';
 import useAuth from '../app/auth/useAuth';
 &nbsp;
-function <span class="fstat-no" title="function not covered" >LoginPage(</span>) {
-  const { user, loginAs } = <span class="cstat-no" title="statement not covered" >useAuth();</span>
+function LoginPage() {
+  const { user, loginAs } = useAuth();
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  if (user) {</span>
-<span class="cstat-no" title="statement not covered" >    return &lt;Redirect to={user.role === 'admin' ? '/admin' : '/me'} /&gt;;</span>
+  if (user) {
+    return &lt;Redirect to={user.role === 'admin' ? '/admin' : '/me'} /&gt;;
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;main className="landing-shell"&gt;
       &lt;section className="landing-card"&gt;
         &lt;div className="landing-brand-row"&gt;
@@ -256,14 +256,14 @@ function <span class="fstat-no" title="function not covered" >LoginPage(</span>)
 &nbsp;
           &lt;div className="landing-right-panel"&gt;
             &lt;div className="role-selector-grid"&gt;
-              &lt;button type="button" className="role-option-card admin" onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >loginAs('admin')}</span>&gt;
+              &lt;button type="button" className="role-option-card admin" onClick={() =&gt; loginAs('admin')}&gt;
                 &lt;div className="role-option-icon admin"&gt;&lt;AdminPanelSettingsRoundedIcon fontSize="medium" /&gt;&lt;/div&gt;
                 &lt;strong&gt;Admin&lt;/strong&gt;
                 &lt;span&gt;Panel global del proyecto.&lt;/span&gt;
                 &lt;span className="role-option-cta"&gt;Ingresar como admin &lt;ArrowForwardRoundedIcon fontSize="small" /&gt;&lt;/span&gt;
               &lt;/button&gt;
 &nbsp;
-              &lt;button type="button" className="role-option-card developer" onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >loginAs('developer')}</span>&gt;
+              &lt;button type="button" className="role-option-card developer" onClick={() =&gt; loginAs('developer')}&gt;
                 &lt;div className="role-option-icon developer"&gt;&lt;CodeRoundedIcon fontSize="medium" /&gt;&lt;/div&gt;
                 &lt;strong&gt;Dev&lt;/strong&gt;
                 &lt;span&gt;Workspace personal de tareas.&lt;/span&gt;
@@ -289,7 +289,7 @@ export default LoginPage;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-04-24T12:55:07.922Z
+                at 2026-04-24T21:46:41.791Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

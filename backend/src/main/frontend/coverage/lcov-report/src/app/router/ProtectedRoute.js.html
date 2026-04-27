@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">85.71% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>6/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>6/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">85.71% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>6/7</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -94,18 +94,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -119,19 +119,19 @@
 import { Redirect, Route } from 'react-router-dom';
 import useAuth from '../auth/useAuth';
 &nbsp;
-function <span class="fstat-no" title="function not covered" >ProtectedRoute(</span>{ component: Component, allowedRoles, ...rest }) {
-  const { user, isAuthenticated } = <span class="cstat-no" title="statement not covered" >useAuth();</span>
+function ProtectedRoute({ component: Component, allowedRoles, ...rest }) {
+  const { user, isAuthenticated } = useAuth();
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;Route
       {...rest}
-      render={<span class="fstat-no" title="function not covered" >(p</span>rops) =&gt; {
-<span class="cstat-no" title="statement not covered" >        if (!isAuthenticated) {</span>
-<span class="cstat-no" title="statement not covered" >          return &lt;Redirect to="/login" /&gt;;</span>
+      render={(props) =&gt; {
+        if (!isAuthenticated) {
+          return &lt;Redirect to="/login" /&gt;;
         }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        if (allowedRoles &amp;&amp; !allowedRoles.includes(user.role)) {</span>
-<span class="cstat-no" title="statement not covered" >          return &lt;Redirect to={user.role === 'admin' ? '/admin' : '/me'} /&gt;;</span>
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (allowedRoles &amp;&amp; !allowedRoles.includes(user.role)) {
+          return &lt;Redirect to={user.role === 'admin' ? <span class="branch-0 cbranch-no" title="branch not covered" >'/admin' </span>: '/me'} /&gt;;
         }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        return &lt;Component {...props} /&gt;;</span>
@@ -148,7 +148,7 @@ export default ProtectedRoute;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-04-24T12:55:07.922Z
+                at 2026-04-24T21:46:41.791Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

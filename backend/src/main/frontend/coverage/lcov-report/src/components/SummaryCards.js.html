@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">77.77% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>7/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -94,17 +94,17 @@
 <a name='L29'></a><a href='#L29'>29</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">40x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -121,22 +121,22 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
 &nbsp;
-function <span class="fstat-no" title="function not covered" >SummaryCards(</span>{ metrics, items }) {
-  const cards = <span class="cstat-no" title="statement not covered" >items || [</span>
+function SummaryCards({ metrics, items }) {
+  const cards = items || <span class="branch-1 cbranch-no" title="branch not covered" >[</span>
     { key: 'total', label: 'Total de Tareas', tone: 'neutral', helper: 'Todas las tareas' },
     { key: 'active', label: 'Tareas Activas', tone: 'info', helper: 'En progreso' },
     { key: 'completed', label: 'Tareas Completadas', tone: 'success', helper: 'Completadas' },
     { key: 'overdue', label: 'Tareas Vencidas', tone: 'danger', helper: 'Vencidas' },
   ];
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;section className="summary-grid" aria-label="Resumen de tareas"&gt;
-      {cards.map(<span class="fstat-no" title="function not covered" >(c</span>ard) =&gt; (
-<span class="cstat-no" title="statement not covered" >        &lt;article key={card.key} className={`summary-card ${card.tone}`}&gt;</span>
+      {cards.map((card) =&gt; (
+        &lt;article key={card.key} className={`summary-card ${card.tone}`}&gt;
           &lt;div className="summary-card-header"&gt;
             &lt;div&gt;
               &lt;p className="summary-label"&gt;{card.label}&lt;/p&gt;
-              &lt;p className="summary-value"&gt;{card.value ?? metrics?.[card.key] ?? 0}&lt;/p&gt;
+              &lt;p className="summary-value"&gt;{card.value ?? metrics?.[card.key] ?? <span class="branch-2 cbranch-no" title="branch not covered" >0}</span>&lt;/p&gt;
               {card.helper &amp;&amp; &lt;p className="summary-change"&gt;{card.helper}&lt;/p&gt;}
             &lt;/div&gt;
             {card.icon &amp;&amp; &lt;div className={`summary-icon ${card.tone}`}&gt;{card.icon}&lt;/div&gt;}
@@ -154,7 +154,7 @@ export default SummaryCards;</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-04-24T12:55:07.922Z
+                at 2026-04-24T21:46:41.791Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
