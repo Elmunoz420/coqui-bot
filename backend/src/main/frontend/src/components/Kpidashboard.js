@@ -29,6 +29,13 @@ const MEMBER_DASH = {
   'Fernanda':   '4 4',
   'Emilio':     '2 4',
 };
+const MEMBER_ALIASES = {
+  'Joaquín': ['joaquin', 'joaquín'],
+  'Esteban': ['esteban'],
+  'Juan Pablo': ['juan pablo', 'juanpablo', 'juan'],
+  'Fernanda': ['fernanda'],
+  'Emilio': ['emilio'],
+};
 
 // ─── Grouped bar chart ────────────────────────────────────────────────────────
 function GroupedBarChart({ title, subtitle, groups, series, colorMap, yLabel, yFormat }) {
@@ -232,10 +239,35 @@ function KPIDashboard({ tasks: providedTasks = null }) {
   }, [providedTasks]);
 
   const kpis = useMemo(() => {
+    function normalizeText(value) {
+      return String(value || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase();
+    }
+
+    function getText(...values) {
+      return values.filter(Boolean).join(' ');
+    }
+
+    function getRealHours(task) {
+      const value = task.realHours ?? task.horasReales ?? task.actualHours ?? 0;
+      const parsed = parseFloat(value);
+      return Number.isFinite(parsed) ? parsed : 0;
+    }
+
+    function isCompleted(task) {
+      const status = String(task.status || task.estado || '').toLowerCase();
+      return Boolean(task.done) || ['completada', 'done', 'cerrada'].includes(status);
+    }
+
     function getDevName(task) {
-      const assigned = (task.assignedUser || '').toLowerCase();
+      const assignedUser = typeof task.assignedUser === 'object'
+        ? getText(task.assignedUser.name, task.assignedUser.nombre, task.assignedUser.username)
+        : task.assignedUser;
+      const assigned = normalizeText(assignedUser);
       for (const m of TEAM_MEMBERS) {
-        if (assigned.includes(m.toLowerCase())) return m;
+        if (MEMBER_ALIASES[m].some(alias => assigned.includes(normalizeText(alias)))) return m;
       }
       return null;
     }
@@ -246,7 +278,7 @@ function KPIDashboard({ tasks: providedTasks = null }) {
         const name = rawSprint.toLowerCase().startsWith('sprint ') ? rawSprint : `Sprint ${rawSprint}`;
         if (ACTIVE_SPRINTS.includes(name)) return name;
       }
-      const desc = (task.descripcion || task.description || task.rawDescription || '').toLowerCase();
+      const desc = getText(task.descripcion, task.description, task.rawDescription, task.title).toLowerCase();
       for (const sp of ACTIVE_SPRINTS) {
         if (desc.includes(sp.toLowerCase())) return sp;
       }
@@ -262,7 +294,7 @@ function KPIDashboard({ tasks: providedTasks = null }) {
     // Chart 1: Completed tasks per developer per sprint
     // Groups = sprints, series = developers
     const chart1Groups = sprints.map(sp => {
-      const spTasks = tasks.filter(t => getSprintName(t) === sp && t.done);
+      const spTasks = tasks.filter(t => getSprintName(t) === sp && isCompleted(t));
       const entry = { label: sp };
       TEAM_MEMBERS.forEach(dev => {
         entry[dev] = spTasks.filter(t => getDevName(t) === dev).length;
@@ -276,7 +308,7 @@ function KPIDashboard({ tasks: providedTasks = null }) {
       sprints.forEach(sp => {
         const hrs = tasks
           .filter(t => getSprintName(t) === sp && getDevName(t) === dev)
-          .reduce((s, t) => s + (parseFloat(t.horasReales) || 0), 0);
+          .reduce((s, t) => s + getRealHours(t), 0);
         data[sp] = Math.round(hrs * 10) / 10;
       });
       return { label: dev, data };
@@ -293,16 +325,16 @@ function KPIDashboard({ tasks: providedTasks = null }) {
       sprints.forEach(sp => {
         const hrs = tasks
           .filter(t => getSprintName(t) === sp && getDevName(t) === dev)
-          .reduce((s, t) => s + (parseFloat(t.horasReales) || 0), 0);
+          .reduce((s, t) => s + getRealHours(t), 0);
         entry[sp] = Math.round(hrs * COST_PER_HOUR);
       });
       return entry;
     });
 
     // Summary stats
-    const totalHrs = tasks.reduce((s, t) => s + (parseFloat(t.horasReales) || 0), 0);
+    const totalHrs = tasks.reduce((s, t) => s + getRealHours(t), 0);
     const totalCost = totalHrs * COST_PER_HOUR;
-    const completedTasks = tasks.filter(t => t.done).length;
+    const completedTasks = tasks.filter(isCompleted).length;
 
     return { chart1Groups, chart2Series: chart2SeriesFiltered, chart3Groups, sprints, totalHrs, totalCost, completedTasks };
   }, [tasks]);
