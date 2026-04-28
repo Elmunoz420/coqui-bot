@@ -45,7 +45,7 @@ public class ToDoItemService {
      */
     @PostConstruct
     public void initDefaults() {
-        usuarioPorDefecto = usuarioRepository.findByUsernameIgnoreCase("coqui_bot_user")
+        usuarioPorDefecto = usuarioRepository.findFirstByUsernameIgnoreCaseOrderByIdUsuarioAsc("coqui_bot_user")
             .orElseGet(() -> {
                 Usuario u = new Usuario();
                 u.setNombre("Coqui Bot User");
@@ -77,7 +77,7 @@ public class ToDoItemService {
     }
 
     private Usuario ensureUser(String username, String nombre, String rol) {
-        return usuarioRepository.findByUsernameIgnoreCase(username)
+        return usuarioRepository.findFirstByUsernameIgnoreCaseOrderByIdUsuarioAsc(username)
             .orElseGet(() -> {
                 Usuario user = new Usuario();
                 user.setUsername(username);
@@ -155,8 +155,8 @@ public class ToDoItemService {
         }
 
         String primaryValue = assignedUser.split(",")[0].trim();
-        return usuarioRepository.findByUsernameIgnoreCase(primaryValue)
-            .or(() -> usuarioRepository.findByNombreIgnoreCase(primaryValue))
+        return usuarioRepository.findFirstByUsernameIgnoreCaseOrderByIdUsuarioAsc(primaryValue)
+            .or(() -> usuarioRepository.findFirstByNombreIgnoreCaseOrderByIdUsuarioAsc(primaryValue))
             .orElseGet(() -> {
                 String firstName = primaryValue.split(" ")[0].trim();
                 return usuarioRepository.findAll().stream()
@@ -181,7 +181,7 @@ public class ToDoItemService {
     }
 
     public Usuario getUserProfile(String username) {
-        return usuarioRepository.findByUsernameIgnoreCase(username)
+        return usuarioRepository.findFirstByUsernameIgnoreCaseOrderByIdUsuarioAsc(username)
                 .orElse(usuarioPorDefecto);
     }
 

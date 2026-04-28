@@ -26,5 +26,6 @@
     "browserslist": [
         "last 5 versions"
     ],
+    "proxy": "http://159.54.154.150",
     "homepage": "."
 }
