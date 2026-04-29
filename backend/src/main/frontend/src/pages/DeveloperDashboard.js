@@ -128,6 +128,21 @@ function PersonalCalendarView({ tasks, onOpenTask }) {
 function DeveloperDashboard() {
   const [activeSection, setActiveSection] = useState('overview');
   const { user, logout } = useAuth();
+
+  const [coquiInsight, setCoquiInsight] = React.useState({
+    title: 'Coqui suggestion',
+    subtitle: 'Cargando recomendaciones personales...',
+    bullets: [{ label: 'Estado', value: 'Conectando con Coqui...' }]
+  });
+
+  React.useEffect(() => {
+    if (user && user.username) {
+      fetch(`/api/ai/insights/developer?username=${user.username}`)
+        .then(r => r.json())
+        .then(data => setCoquiInsight(data))
+        .catch(() => {});
+    }
+  }, [user]);
   const {
     isLoading,
     error,
@@ -240,14 +255,10 @@ function DeveloperDashboard() {
       {activeSection === 'overview' && (
         <>
         <AIGeneratedInsightPanel
-          title="Coqui suggestion"
-          subtitle="Espacio para recomendaciones personales de trabajo."
+          title={coquiInsight.title}
+          subtitle={coquiInsight.subtitle}
           tone="violet"
-          bullets={[
-            { label: 'Prioridad sugerida', value: 'Enfocarte primero en tareas con fecha límite más cercana.' },
-            { label: 'Bloqueo potencial', value: 'Marcar tareas sin fecha o con descripción incompleta para revisión.' },
-            { label: 'Próximo análisis', value: 'Conectar este panel con contexto real de tus tareas y avances.' },
-          ]}
+          bullets={coquiInsight.bullets || []}
         />
 
         <section className="dev-command-grid">
