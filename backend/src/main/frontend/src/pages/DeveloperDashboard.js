@@ -132,7 +132,8 @@ function DeveloperDashboard() {
   const [coquiInsight, setCoquiInsight] = React.useState({
     title: 'Coqui suggestion',
     subtitle: 'Cargando recomendaciones personales...',
-    bullets: [{ label: 'Estado', value: 'Conectando con Coqui...' }]
+    bullets: [{ label: 'Estado', value: 'Conectando con Coqui...' }],
+    optimizationPlan: []
   });
 
   React.useEffect(() => {
@@ -259,6 +260,7 @@ function DeveloperDashboard() {
           subtitle={coquiInsight.subtitle}
           tone="violet"
           bullets={coquiInsight.bullets || []}
+          optimizationPlan={coquiInsight.optimizationPlan || []}
         />
 
         <section className="dev-command-grid">

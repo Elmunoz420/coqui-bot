@@ -460,7 +460,8 @@ function AdminDashboard() {
   const [coquiInsight, setCoquiInsight] = React.useState({
     title: 'Coqui suggestion',
     subtitle: 'Cargando análisis del equipo...',
-    bullets: [{ label: 'Estado', value: 'Conectando con Coqui...' }]
+    bullets: [{ label: 'Estado', value: 'Conectando con Coqui...' }],
+    optimizationPlan: []
   });
 
   React.useEffect(() => {
@@ -599,6 +600,7 @@ function AdminDashboard() {
             subtitle={coquiInsight.subtitle}
             tone="emerald"
             bullets={coquiInsight.bullets || []}
+            optimizationPlan={coquiInsight.optimizationPlan || []}
           />
 
           <section className="admin-dashboard-grid">
