@@ -45,13 +45,13 @@ spec:
     spec:
       containers:
         - name: todolistapp-springboot
-          image: mx-queretaro-1.ocir.io/axicfx7xkp0y/agileimage:0.1
+          image: mx-queretaro-1.ocir.io/axsmsoz5mjgw/agileimage:0.1
           imagePullPolicy: Always
           env:
             - name: db_user
               value: "COQUIBOT"
             - name: db_url
-              value: "jdbc:oracle:thin:@taskbotdb_tp?TNS_ADMIN=/mtdrworkshop/creds"
+              value: "jdbc:oracle:thin:@coquibot_tp?TNS_ADMIN=/mtdrworkshop/creds"
             - name: driver_class_name
               value: "oracle.jdbc.OracleDriver"
             - name: OCI_REGION
@@ -75,6 +75,11 @@ spec:
                 secretKeyRef:
                   name: telegram-bot-secret
                   key: token
+            - name: ANTHROPIC_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: anthropic-secret
+                  key: apikey
           volumeMounts:
             - name: creds
               mountPath: /mtdrworkshop/creds
