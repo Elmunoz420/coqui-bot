@@ -20,6 +20,7 @@ import TaskTable from '../components/TaskTable';
 import TaskDetailDrawer from '../components/TaskDetailDrawer';
 import TeamChannel from '../components/TeamChannel';
 import KPIDashboard from '../components/Kpidashboard';
+import AIGeneratedInsightPanel from '../components/AIGeneratedInsightPanel';
 import useTaskWorkspace from '../features/tasks/useTaskWorkspace';
 import useAuth from '../app/auth/useAuth';
 import WorkspaceShell from '../components/layout/WorkspaceShell';
@@ -580,6 +581,17 @@ function AdminDashboard() {
 
       {activeSection === 'overview' && (
         <>
+          <AIGeneratedInsightPanel
+            title="Coqui suggestion"
+            subtitle="Resumen ejecutivo sugerido para priorizar al equipo."
+            tone="emerald"
+            bullets={[
+              { label: 'Riesgo principal', value: 'Revisar tareas activas sin fecha límite o sin responsable claro.' },
+              { label: 'Sugerencia', value: 'Balancear carga entre desarrolladores antes del siguiente cierre de sprint.' },
+              { label: 'Próximo análisis', value: 'Conectar este espacio con métricas reales y recomendaciones del modelo.' },
+            ]}
+          />
+
           <section className="admin-dashboard-grid">
             <MiniBarChart tasks={normalizedTasks} />
             <MiniLineChart tasks={normalizedTasks} />
