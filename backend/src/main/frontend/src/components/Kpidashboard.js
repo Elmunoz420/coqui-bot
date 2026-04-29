@@ -7,19 +7,19 @@ const COST_PER_HOUR = 50000 / 2080; // ~$24.04
 
 const TEAM_MEMBERS = ['Joaquín', 'Esteban', 'Juan Pablo', 'Fernanda', 'Emilio'];
 const MEMBER_COLORS = {
-  'Joaquín':    '#4A9EFF',
-  'Esteban':    '#FF6B35',
-  'Juan Pablo': '#51CF66',
+  'Joaquín':    '#4DA6FF',
+  'Esteban':    '#7C6AF7',
+  'Juan Pablo': '#00D18C',
   'Fernanda':   '#FF6B9D',
-  'Emilio':     '#FFD43B',
+  'Emilio':     '#FFB347',
 };
 const SPRINT_COLORS = {
-  'Sprint 0': '#A78BFA',
-  'Sprint 1': '#4A9EFF',
-  'Sprint 2': '#FF6B35',
-  'Sprint 3': '#51CF66',
+  'Sprint 0': '#7C6AF7',
+  'Sprint 1': '#4DA6FF',
+  'Sprint 2': '#00D18C',
+  'Sprint 3': '#FFB347',
   'Sprint 4': '#FF6B9D',
-  'Sprint 5': '#FFD43B',
+  'Sprint 5': '#FF5C5C',
 };
 const ACTIVE_SPRINTS = ['Sprint 0', 'Sprint 1', 'Sprint 2', 'Sprint 3', 'Sprint 4', 'Sprint 5'];
 const MEMBER_DASH = {
@@ -37,16 +37,54 @@ const MEMBER_ALIASES = {
   'Emilio': ['emilio'],
 };
 
+function ChartShell({ title, subtitle, children, onExpand, meta }) {
+  return (
+    <article className="kpi-chart-card">
+      <div className="kpi-chart-header">
+        <div>
+          <h3>{title}</h3>
+          {subtitle && <p>{subtitle}</p>}
+          {meta && <small>{meta}</small>}
+        </div>
+        {onExpand && (
+          <button type="button" className="kpi-expand-button" onClick={onExpand}>
+            Ver grande
+          </button>
+        )}
+      </div>
+      {children}
+    </article>
+  );
+}
+
+function KPIChartModal({ chart, onClose }) {
+  if (!chart) return null;
+  return (
+    <div className="kpi-modal-backdrop" role="dialog" aria-modal="true">
+      <section className="kpi-modal">
+        <div className="kpi-modal-header">
+          <div>
+            <h2>{chart.title}</h2>
+            {chart.subtitle && <p>{chart.subtitle}</p>}
+          </div>
+          <button type="button" onClick={onClose} aria-label="Cerrar gráfica">×</button>
+        </div>
+        {chart.render(true)}
+      </section>
+    </div>
+  );
+}
+
 // ─── Grouped bar chart ────────────────────────────────────────────────────────
-function GroupedBarChart({ title, subtitle, groups, series, colorMap, yLabel, yFormat }) {
+function GroupedBarChart({ groups, series, colorMap, yLabel, yFormat, large = false }) {
   const allVals = groups.flatMap(g => series.map(s => g[s] || 0));
   const maxVal = Math.max(...allVals, 1);
-  const chartH = 200;
-  const barW = 22;
-  const gap = 4;
-  const groupGap = 20;
+  const chartH = large ? 360 : 240;
+  const barW = large ? 30 : 24;
+  const gap = large ? 8 : 5;
+  const groupGap = large ? 34 : 26;
   const groupW = series.length * (barW + gap) - gap + groupGap;
-  const totalW = groups.length * groupW;
+  const totalW = Math.max(groups.length * groupW, large ? 860 : 620);
 
   function fmt(v) {
     if (yFormat === 'usd') return `$${Math.round(v).toLocaleString()}`;
@@ -54,41 +92,33 @@ function GroupedBarChart({ title, subtitle, groups, series, colorMap, yLabel, yF
   }
 
   return (
-    <div style={{ background: 'var(--surface-secondary)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 'var(--radius-lg)', padding: '2rem' }}>
-      <h3 style={{ margin: '0 0 4px', fontSize: '20px', fontWeight: 700, color: '#FFFFFF' }}>{title}</h3>
-      {subtitle && <p style={{ margin: '0 0 1rem', fontSize: '14px', color: 'rgba(255,255,255,0.75)' }}>{subtitle}</p>}
-
-      {/* Legend */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginBottom: '1rem' }}>
+    <div className={`kpi-chart-body ${large ? 'large' : ''}`}>
+      <div className="kpi-chart-legend">
         {series.map(s => (
-          <div key={s} style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-            <div style={{ width: '12px', height: '12px', borderRadius: '2px', background: colorMap[s] || '#6b7280' }} />
-            <span style={{ fontSize: '14px', color: '#FFFFFF' }}>{s}</span>
-          </div>
+          <span key={s}><i style={{ background: colorMap[s] || '#6b7280' }} />{s}</span>
         ))}
       </div>
 
-      {/* Chart area */}
-      <div style={{ overflowX: 'auto' }}>
-        <svg width={Math.max(totalW + 60, 400)} height={chartH + 60} style={{ display: 'block' }}>
+      <div className="kpi-svg-scroll">
+        <svg viewBox={`0 0 ${totalW + 70} ${chartH + 68}`} width="100%" height={chartH + 68} preserveAspectRatio="xMidYMid meet">
           {/* Y gridlines */}
           {[0, 0.25, 0.5, 0.75, 1].map(pct => {
             const y = 10 + chartH * (1 - pct);
             const val = maxVal * pct;
             return (
               <g key={pct}>
-                <line x1={50} x2={totalW + 60} y1={y} y2={y} stroke="var(--border-subtle)" strokeDasharray="4 3" />
-                <text x={45} y={y + 4} textAnchor="end" fontSize="13" fill="rgba(255,255,255,0.85)">{fmt(val)}</text>
+                <line x1={56} x2={totalW + 56} y1={y} y2={y} className="kpi-grid-line" />
+                <text x={50} y={y + 4} textAnchor="end" className="kpi-axis-text">{fmt(val)}</text>
               </g>
             );
           })}
 
           {/* Y axis label */}
-          <text transform={`translate(12, ${10 + chartH / 2}) rotate(-90)`} textAnchor="middle" fontSize="10" fill="rgba(255,255,255,0.85)">{yLabel}</text>
+          <text transform={`translate(14, ${10 + chartH / 2}) rotate(-90)`} textAnchor="middle" className="kpi-axis-text">{yLabel}</text>
 
           {/* Bars */}
           {groups.map((group, gi) => {
-            const gx = 55 + gi * groupW;
+            const gx = 64 + gi * groupW;
             return (
               <g key={gi}>
                 {series.map((s, si) => {
@@ -98,11 +128,11 @@ function GroupedBarChart({ title, subtitle, groups, series, colorMap, yLabel, yF
                   const y = 10 + chartH - barH;
                   return (
                     <g key={s}>
-                      <rect x={x} y={y} width={barW} height={barH} fill={colorMap[s] || '#6b7280'} rx="2" opacity="0.9">
+                      <rect x={x} y={y} width={barW} height={barH} fill={colorMap[s] || '#6b7280'} rx="5" opacity="0.95">
                         <title>{`${group.label} — ${s}: ${fmt(val)}`}</title>
                       </rect>
                       {val > 0 && barH > 14 && (
-                        <text x={x + barW / 2} y={y + 11} textAnchor="middle" fontSize="13" fill="white" fontWeight="600">{fmt(val)}</text>
+                        <text x={x + barW / 2} y={y + 13} textAnchor="middle" className="kpi-bar-label">{fmt(val)}</text>
                       )}
                     </g>
                   );
@@ -110,15 +140,15 @@ function GroupedBarChart({ title, subtitle, groups, series, colorMap, yLabel, yF
                 {/* Group label */}
                 <text
                   x={gx + (series.length * (barW + gap) - gap) / 2}
-                  y={10 + chartH + 16}
-                  textAnchor="middle" fontSize="13" fill="#FFFFFF"
+                  y={10 + chartH + 22}
+                  textAnchor="middle" className="kpi-axis-text"
                 >{group.label}</text>
               </g>
             );
           })}
 
           {/* X axis */}
-          <line x1={50} x2={totalW + 60} y1={10 + chartH} y2={10 + chartH} stroke="var(--border-default)" />
+          <line x1={56} x2={totalW + 56} y1={10 + chartH} y2={10 + chartH} stroke="var(--border-default)" />
         </svg>
       </div>
     </div>
@@ -126,11 +156,11 @@ function GroupedBarChart({ title, subtitle, groups, series, colorMap, yLabel, yF
 }
 
 // ─── Line chart ───────────────────────────────────────────────────────────────
-function LineChart({ title, subtitle, sprints, series, colorMap, dashMap, yLabel }) {
+function LineChart({ sprints, series, colorMap, dashMap, yLabel, large = false }) {
   const allVals = series.flatMap(s => sprints.map(sp => s.data[sp] || 0));
   const maxVal = Math.max(...allVals, 1);
-  const chartH = 200;
-  const chartW = 600;
+  const chartH = large ? 380 : 280;
+  const chartW = large ? 980 : 820;
   const padL = 55, padR = 20, padT = 10, padB = 50;
 
   function xPos(i) {
@@ -140,35 +170,28 @@ function LineChart({ title, subtitle, sprints, series, colorMap, dashMap, yLabel
   function yPos(v) { return padT + chartH * (1 - v / maxVal); }
 
   return (
-    <div style={{ background: 'var(--surface-secondary)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 'var(--radius-lg)', padding: '2rem' }}>
-      <h3 style={{ margin: '0 0 4px', fontSize: '20px', fontWeight: 700, color: '#FFFFFF' }}>{title}</h3>
-      {subtitle && <p style={{ margin: '0 0 1rem', fontSize: '14px', color: 'rgba(255,255,255,0.75)' }}>{subtitle}</p>}
-
-      {/* Legend */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginBottom: '1rem' }}>
+    <div className={`kpi-chart-body ${large ? 'large' : ''}`}>
+      <div className="kpi-chart-legend">
         {series.map(s => (
-          <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-            <div style={{ width: '20px', height: '3px', background: colorMap[s.label] || '#6b7280', borderRadius: '2px' }} />
-            <span style={{ fontSize: '14px', color: '#FFFFFF' }}>{s.label}</span>
-          </div>
+          <span key={s.label}><i className="line" style={{ background: colorMap[s.label] || '#6b7280' }} />{s.label}</span>
         ))}
       </div>
 
-      <div style={{ overflowX: 'auto' }}>
-        <svg viewBox={`0 0 ${chartW + padL + padR} ${chartH + padT + padB}`} width="100%" height="100%" style={{ display: 'block', minHeight: chartH + padT + padB }}>
+      <div className="kpi-svg-scroll">
+        <svg viewBox={`0 0 ${chartW + padL + padR} ${chartH + padT + padB}`} width="100%" height={chartH + padT + padB} preserveAspectRatio="xMidYMid meet">
           {/* Gridlines */}
           {[0, 0.25, 0.5, 0.75, 1].map(pct => {
             const y = padT + chartH * (1 - pct);
             return (
               <g key={pct}>
-                <line x1={padL} x2={padL + chartW} y1={y} y2={y} stroke="var(--border-subtle)" strokeDasharray="4 3" />
-                <text x={padL - 6} y={y + 4} textAnchor="end" fontSize="13" fill="rgba(255,255,255,0.85)">{Math.round(maxVal * pct)}</text>
+                <line x1={padL} x2={padL + chartW} y1={y} y2={y} className="kpi-grid-line" />
+                <text x={padL - 6} y={y + 4} textAnchor="end" className="kpi-axis-text">{Math.round(maxVal * pct)}</text>
               </g>
             );
           })}
 
           {/* Y label */}
-          <text transform={`translate(12, ${padT + chartH / 2}) rotate(-90)`} textAnchor="middle" fontSize="13" fill="rgba(255,255,255,0.85)">{yLabel}</text>
+          <text transform={`translate(12, ${padT + chartH / 2}) rotate(-90)`} textAnchor="middle" className="kpi-axis-text">{yLabel}</text>
 
           {/* X axis baseline — rendered before lines so zero-value lines appear on top */}
           <line x1={padL} x2={padL + chartW} y1={padT + chartH} y2={padT + chartH} stroke="var(--border-default)" />
@@ -195,7 +218,7 @@ function LineChart({ title, subtitle, sprints, series, colorMap, dashMap, yLabel
 
           {/* X axis labels */}
           {sprints.map((sp, i) => (
-            <text key={sp} x={xPos(i)} y={padT + chartH + 20} textAnchor="middle" fontSize="13" fill="#FFFFFF">{sp}</text>
+            <text key={sp} x={xPos(i)} y={padT + chartH + 24} textAnchor="middle" className="kpi-axis-text">{sp}</text>
           ))}
         </svg>
       </div>
@@ -208,6 +231,7 @@ function KPIDashboard({ tasks: providedTasks = null }) {
   const [tasks, setTasks] = useState(providedTasks || []);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [expandedChart, setExpandedChart] = useState(null);
 
   useEffect(() => {
     if (providedTasks) {
@@ -335,58 +359,120 @@ function KPIDashboard({ tasks: providedTasks = null }) {
     const totalHrs = tasks.reduce((s, t) => s + getRealHours(t), 0);
     const totalCost = totalHrs * COST_PER_HOUR;
     const completedTasks = tasks.filter(isCompleted).length;
+    const completionRate = tasks.length ? Math.round((completedTasks / tasks.length) * 100) : 0;
 
-    return { chart1Groups, chart2Series: chart2SeriesFiltered, chart3Groups, sprints, totalHrs, totalCost, completedTasks };
+    return { chart1Groups, chart2Series: chart2SeriesFiltered, chart3Groups, sprints, totalHrs, totalCost, completedTasks, completionRate };
   }, [tasks]);
 
   if (loading) return <div style={{ padding: '2rem', color: 'rgba(255,255,255,0.75)' }}>Loading KPIs...</div>;
   if (error) return <div style={{ padding: '2rem', color: 'var(--color-error)' }}>Error: {error}</div>;
 
-  return (
-    <section>
-      <div style={{ marginBottom: '1.5rem' }}>
-        <h2 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700 }}>KPI Dashboard</h2>
-        <p style={{ margin: '4px 0 0', fontSize: '0.8rem', color: 'rgba(255,255,255,0.75)' }}>
-          {tasks.length} tasks total · {kpis.completedTasks} completed · {Math.round(kpis.totalHrs)}h logged · ${Math.round(kpis.totalCost).toLocaleString()} USD total cost
-        </p>
-        <p style={{ margin: '2px 0 0', fontSize: '0.72rem', color: 'rgba(255,255,255,0.6)' }}>
-          Cost formula: real hours × ${COST_PER_HOUR.toFixed(2)}/hr ($50,000/yr ÷ 2,080 hrs)
-        </p>
-      </div>
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-        {/* Chart 1: Tasks completed per developer per sprint */}
+  const chartConfigs = [
+    {
+      id: 'completed',
+      title: 'Tareas completadas por sprint',
+      subtitle: 'Completadas agrupadas por developer y sprint.',
+      meta: 'Dato: count de tareas con estado completada / done / cerrada.',
+      render: (large = false) => (
         <GroupedBarChart
-          title="Tareas Completadas por Sprint"
-          subtitle="Grouped by developer — completed tasks only"
           groups={kpis.chart1Groups}
           series={TEAM_MEMBERS}
           colorMap={MEMBER_COLORS}
           yLabel="Tareas"
+          large={large}
         />
-
-        {/* Chart 2: Real hours per developer (line trend) */}
+      ),
+    },
+    {
+      id: 'hours',
+      title: 'Horas reales por desarrollador',
+      subtitle: 'Tendencia de horas reales registradas por sprint.',
+      meta: 'Dato: suma de horasReales por developer dentro de cada sprint.',
+      render: (large = false) => (
         <LineChart
-          title="Horas Reales por Desarrollador (tendencia)"
-          subtitle="Real hours logged per developer across sprints"
           sprints={kpis.sprints}
           series={kpis.chart2Series}
           colorMap={MEMBER_COLORS}
           dashMap={MEMBER_DASH}
           yLabel="Horas"
+          large={large}
         />
-
-        {/* Chart 3: Cost per developer per sprint */}
+      ),
+    },
+    {
+      id: 'cost',
+      title: 'Costo por desarrollador por sprint',
+      subtitle: `Costo = horas reales × $${COST_PER_HOUR.toFixed(2)}/hr.`,
+      meta: 'Tarifa calculada con $50,000 USD anuales entre 2,080 horas.',
+      render: (large = false) => (
         <GroupedBarChart
-          title="Costo por Desarrollador por Sprint (USD)"
-          subtitle={`Cost = real hours × $${COST_PER_HOUR.toFixed(2)}/hr`}
           groups={kpis.chart3Groups}
           series={kpis.sprints}
           colorMap={SPRINT_COLORS}
           yLabel="USD"
           yFormat="usd"
+          large={large}
         />
+      ),
+    },
+  ];
+
+  return (
+    <section className="kpi-dashboard">
+      <div className="kpi-hero">
+        <div>
+          <h2>KPI Dashboard</h2>
+          <p>Horas, costo y avance del equipo con fórmulas visibles para revisión.</p>
+        </div>
+        <span>{kpis.sprints.length} sprints analizados</span>
       </div>
+
+      <div className="kpi-formula-grid">
+        <article className="kpi-stat-card">
+          <span>Total tareas</span>
+          <strong>{tasks.length}</strong>
+          <small>Base de tareas cargadas</small>
+        </article>
+        <article className="kpi-stat-card">
+          <span>Completadas</span>
+          <strong>{kpis.completedTasks}</strong>
+          <small>{kpis.completionRate}% de avance</small>
+        </article>
+        <article className="kpi-stat-card">
+          <span>Horas reales</span>
+          <strong>{Math.round(kpis.totalHrs)}h</strong>
+          <small>Suma de horasReales</small>
+        </article>
+        <article className="kpi-stat-card">
+          <span>Costo total</span>
+          <strong>${Math.round(kpis.totalCost).toLocaleString()}</strong>
+          <small>USD estimado</small>
+        </article>
+      </div>
+
+      <article className="kpi-formula-card">
+        <div>
+          <span>Fórmula de costo</span>
+          <strong>costo = horas reales × ${COST_PER_HOUR.toFixed(2)} USD/hr</strong>
+        </div>
+        <p>$50,000 USD/año ÷ 2,080 horas laborales = ${COST_PER_HOUR.toFixed(2)} USD/hr. El costo por sprint y developer se calcula con la suma de `horasReales`.</p>
+      </article>
+
+      <div className="kpi-chart-grid">
+        {chartConfigs.map((chart) => (
+          <ChartShell
+            key={chart.id}
+            title={chart.title}
+            subtitle={chart.subtitle}
+            meta={chart.meta}
+            onExpand={() => setExpandedChart(chart)}
+          >
+            {chart.render(false)}
+          </ChartShell>
+        ))}
+      </div>
+
+      <KPIChartModal chart={expandedChart} onClose={() => setExpandedChart(null)} />
     </section>
   );
 }

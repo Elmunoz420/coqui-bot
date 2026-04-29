@@ -4,6 +4,7 @@ import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
 import LockRoundedIcon from '@mui/icons-material/LockRounded';
 import ShieldRoundedIcon from '@mui/icons-material/ShieldRounded';
 import useAuth from '../app/auth/useAuth';
+import CoquiIcon from '../components/CoquiIcon';
 
 function LoginPage() {
   const { user, login, register } = useAuth();
@@ -49,7 +50,7 @@ function LoginPage() {
       <section className="landing-card">
         <div className="landing-brand-row">
           <div className="workspace-brand">
-            <div className="brand-icon">🐸</div>
+            <div className="brand-icon"><CoquiIcon /></div>
             <div>
               <div className="brand-name">COQUI BOT</div>
               <div className="brand-tagline">Plataforma de gestión de tareas</div>

@@ -1,5 +1,7 @@
 import React from 'react';
 import NotificationsNoneRoundedIcon from '@mui/icons-material/NotificationsNoneRounded';
+import FloatingCoquiChat from '../FloatingCoquiChat';
+import CoquiIcon from '../CoquiIcon';
 
 function WorkspaceShell({
   title,
@@ -9,14 +11,15 @@ function WorkspaceShell({
   navItems,
   activeNav,
   accent = 'emerald',
+  variant = 'default',
   children,
 }) {
   return (
-    <div className={`workspace-shell accent-${accent}`}>
+    <div className={`workspace-shell accent-${accent} workspace-shell-${variant}`}>
       <aside className="workspace-sidebar">
         <div>
           <div className="workspace-brand">
-            <div className="brand-icon">🐸</div>
+            <div className="brand-icon"><CoquiIcon /></div>
             <div>
               <div className="brand-name">COQUI BOT</div>
               <div className="brand-tagline">{title}</div>
@@ -69,6 +72,7 @@ function WorkspaceShell({
 
         <main className="workspace-stage-content">{children}</main>
       </section>
+      <FloatingCoquiChat />
     </div>
   );
 }
