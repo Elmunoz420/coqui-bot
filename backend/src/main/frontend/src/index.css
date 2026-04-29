@@ -1,5 +1,6 @@
 /* Global App Styles - Dark SaaS Theme */
 @import './styles/darkTheme.css';
+@import './styles/roleLayouts.css';
 
 /* Reset & Base Styles */
 * {
@@ -19,8 +20,8 @@ html {
 body {
   margin: 0;
   padding: 0;
-  background-color: var(--color-base);
-  color: var(--color-text-primary);
+  background-color: var(--bg-base);
+  color: var(--text-primary);
   font-size: 14px;
   line-height: 1.5;
 }
@@ -29,7 +30,7 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: var(--color-base);
+  background-color: var(--bg-base);
 }
 
 /* Scrollbar Styling */
@@ -39,17 +40,17 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-surface-secondary);
+  background: var(--surface-secondary);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-border-secondary);
+  background: var(--border-default);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-border-primary);
+  background: var(--border-strong);
 }
 
 /* Main Layout Structure */
@@ -81,7 +82,7 @@ main.main-layout {
   justify-content: center;
   gap: var(--spacing-md);
   padding: var(--spacing-xl) var(--spacing-lg);
-  color: var(--color-text-secondary);
+  color: var(--text-secondary);
 }
 
 /* Error Banner */
@@ -91,10 +92,10 @@ main.main-layout {
   gap: var(--spacing-md);
   padding: var(--spacing-md);
   margin-bottom: var(--spacing-lg);
-  background-color: var(--color-error-subtle);
+  background-color: var(--color-error-bg);
   border-left: 4px solid var(--color-error);
   border-radius: var(--radius-sm);
-  color: var(--color-text-primary);
+  color: var(--text-primary);
   animation: slideDown 0.3s ease-out;
 }
 

@@ -7,7 +7,8 @@ import java.time.OffsetDateTime;
 @Table(name = "TAREA")
 public class Tarea {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tarea_seq")
+    @SequenceGenerator(name = "tarea_seq", sequenceName = "SEQ_TAREA", allocationSize = 1)
     @Column(name = "ID_TAREA")
     private int idTarea;
 
