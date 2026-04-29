@@ -13,6 +13,7 @@ import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
 import BoltRoundedIcon from '@mui/icons-material/BoltRounded';
 import SummaryCards from '../components/SummaryCards';
 import TaskDetailDrawer from '../components/TaskDetailDrawer';
+import AIGeneratedInsightPanel from '../components/AIGeneratedInsightPanel';
 import useAuth from '../app/auth/useAuth';
 import useTaskWorkspace, { buildMetrics, filterTasksForUser } from '../features/tasks/useTaskWorkspace';
 import API_LIST from '../API';
@@ -238,6 +239,17 @@ function DeveloperDashboard() {
 
       {activeSection === 'overview' && (
         <>
+        <AIGeneratedInsightPanel
+          title="Coqui suggestion"
+          subtitle="Espacio para recomendaciones personales de trabajo."
+          tone="violet"
+          bullets={[
+            { label: 'Prioridad sugerida', value: 'Enfocarte primero en tareas con fecha límite más cercana.' },
+            { label: 'Bloqueo potencial', value: 'Marcar tareas sin fecha o con descripción incompleta para revisión.' },
+            { label: 'Próximo análisis', value: 'Conectar este panel con contexto real de tus tareas y avances.' },
+          ]}
+        />
+
         <section className="dev-command-grid">
           <article className="dev-primary-panel">
             <div className="panel-header">
