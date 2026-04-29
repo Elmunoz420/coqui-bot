@@ -18,7 +18,7 @@ function translateOption(opt) {
   return map[opt] || opt;
 }
 
-function TaskFilters({ filters, onChange, statusOptions, priorityOptions, developerOptions, onReset }) {
+function TaskFilters({ filters, onChange, statusOptions, priorityOptions, developerOptions, onReset, hideDeveloperFilter = false }) {
   return (
     <section className="filters-panel" aria-label="Filtros de tareas">
       <div className="field search-field">
@@ -59,14 +59,16 @@ function TaskFilters({ filters, onChange, statusOptions, priorityOptions, develo
         </select>
       </div>
 
-      <div className="field">
-        <label htmlFor="developerFilter">Desarrollador</label>
-        <select id="developerFilter" value={filters.developer} onChange={(e) => onChange('developer', e.target.value)}>
-          {(developerOptions || ['All']).map((opt) => (
-            <option key={opt} value={opt}>{opt === 'All' ? 'Todos' : opt}</option>
-          ))}
-        </select>
-      </div>
+      {!hideDeveloperFilter && (
+        <div className="field">
+          <label htmlFor="developerFilter">Desarrollador</label>
+          <select id="developerFilter" value={filters.developer} onChange={(e) => onChange('developer', e.target.value)}>
+            {(developerOptions || ['All']).map((opt) => (
+              <option key={opt} value={opt}>{opt === 'All' ? 'Todos' : opt}</option>
+            ))}
+          </select>
+        </div>
+      )}
 
       <div className="field">
         <label htmlFor="sortFilter">Ordenar por</label>

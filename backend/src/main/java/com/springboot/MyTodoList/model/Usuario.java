@@ -1,5 +1,6 @@
 package com.springboot.MyTodoList.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.OffsetDateTime;
 
@@ -29,6 +30,10 @@ public class Usuario {
     @Column(name = "ESTADO")
     private String estado;
 
+    @JsonIgnore
+    @Column(name = "PASSWORD_HASH")
+    private String passwordHash;
+
     public Usuario() {}
 
     public int getIdUsuario() { return idUsuario; }
@@ -51,4 +56,7 @@ public class Usuario {
 
     public String getEstado() { return estado; }
     public void setEstado(String estado) { this.estado = estado; }
+
+    public String getPasswordHash() { return passwordHash; }
+    public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
 }

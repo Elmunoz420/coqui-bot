@@ -5,9 +5,12 @@ spring.datasource.url=jdbc:oracle:thin:@taskbotdb_medium?TNS_ADMIN=./wallet
 spring.datasource.username=ADMIN
 spring.datasource.password=YOUR_ATP_PASSWORD
 
+# Oracle ATP: desactiva SSL hostname verification (requerido con wallet self-signed)
+oracle.jdbc.fanEnabled=false
+spring.jpa.properties.hibernate.dialect=org.hibernate.community.dialect.Oracle12cDialect
+
 telegram.bot.token=YOUR_TELEGRAM_BOT_TOKEN
 telegram.bot.name=Oracle_420_bot
 
 deepseek.api.key=sk-disabled
-
-server.port=9090
+server.port=8080
