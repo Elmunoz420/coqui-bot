@@ -1,11 +1,12 @@
 import React from 'react';
+import CoquiIcon from './CoquiIcon';
 
 function Topbar({ tagline = 'Panel de Operaciones de Tareas', user, onLogout }) {
   return (
     <header className="topbar">
       <div className="topbar-container">
         <div className="topbar-brand">
-          <div className="brand-icon">🐸</div>
+          <div className="brand-icon"><CoquiIcon /></div>
           <div>
             <div className="brand-name">COQUI BOT</div>
             <div className="brand-tagline">{tagline}</div>

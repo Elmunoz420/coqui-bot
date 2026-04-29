@@ -184,6 +184,7 @@ export default function useTaskWorkspace(options = {}) {
   } = options;
   const [isLoading, setLoading] = useState(false);
   const [isInserting, setInserting] = useState(false);
+  const [isUpdating, setUpdating] = useState(false);
   const [isPreviewMode, setPreviewMode] = useState(false);
   const [items, setItems] = useState([]);
   const [activityLog, setActivityLog] = useState([]);
@@ -442,6 +443,76 @@ export default function useTaskWorkspace(options = {}) {
       });
   }
 
+  function updateItem(id, taskData) {
+    setUpdating(true);
+    const payload = {
+      description: taskData.title || taskData.description,
+      titulo: taskData.title || taskData.description,
+      descripcion: taskData.descripcion || '',
+      prioridad: taskData.prioridad || 'media',
+      sprint: taskData.sprint || null,
+      fechaLimite: taskData.fechaLimite || null,
+      horasEstimadas: taskData.horasEstimadas ? parseFloat(taskData.horasEstimadas) : 0,
+      horasReales: taskData.horasReales ? parseFloat(taskData.horasReales) : 0,
+      done: Boolean(taskData.done),
+      assignedUser: taskData.assignedUser || null,
+    };
+
+    const mergeUpdatedItem = (baseItem) => ({
+      ...baseItem,
+      titulo: payload.description,
+      description: payload.description,
+      descripcion: payload.descripcion,
+      prioridad: payload.prioridad,
+      sprint: payload.sprint,
+      fechaLimite: payload.fechaLimite,
+      horasEstimadas: payload.horasEstimadas,
+      horasReales: payload.horasReales,
+      done: payload.done,
+      estado: payload.done ? 'completada' : 'pendiente',
+      assignedUser: payload.assignedUser,
+    });
+
+    if (isPreviewMode) {
+      let updatedItem;
+      setItems((prev) => prev.map((item) => {
+        if (String(item.id) !== String(id)) return item;
+        updatedItem = mergeUpdatedItem(item);
+        return updatedItem;
+      }));
+      if (updatedItem && selectedTask && String(selectedTask.id) === String(id)) {
+        setSelectedTask(normalizeTask(taskIdMap, updatedItem));
+      }
+      setUpdating(false);
+      recordActivity(`Tarea #${id} editada en preview local`, id);
+      return Promise.resolve(updatedItem);
+    }
+
+    return fetch(`${API_LIST}/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
+      .then((response) => {
+        if (response.ok) return response.json();
+        throw new Error('Error al editar tarea');
+      })
+      .then((updatedItem) => {
+        setItems((prev) => prev.map((item) => (String(item.id) === String(id) ? mergeUpdatedItem({ ...item, ...updatedItem }) : item)));
+        if (selectedTask && String(selectedTask.id) === String(id)) {
+          setSelectedTask(normalizeTask(taskIdMap, mergeUpdatedItem({ ...updatedItem, id })));
+        }
+        setUpdating(false);
+        recordActivity(`Tarea #${id} editada`, id);
+        return updatedItem;
+      })
+      .catch((err) => {
+        setUpdating(false);
+        setError(err);
+        throw err;
+      });
+  }
+
   function handleFilterChange(field, value) {
     setFilters((prev) => ({ ...prev, [field]: value }));
   }
@@ -470,6 +541,7 @@ export default function useTaskWorkspace(options = {}) {
   return {
     isLoading,
     isInserting,
+    isUpdating,
     isPreviewMode,
     activeTab,
     setActiveTab,
@@ -485,6 +557,7 @@ export default function useTaskWorkspace(options = {}) {
     selectedTask,
     isTaskDetailOpen,
     addItem,
+    updateItem,
     deleteItem,
     toggleDone,
     handleFilterChange,

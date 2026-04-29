@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
 import ChecklistRoundedIcon from '@mui/icons-material/ChecklistRounded';
@@ -10,12 +10,119 @@ import PendingActionsRoundedIcon from '@mui/icons-material/PendingActionsRounded
 import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 import WarningAmberRoundedIcon from '@mui/icons-material/WarningAmberRounded';
 import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
+import BoltRoundedIcon from '@mui/icons-material/BoltRounded';
 import SummaryCards from '../components/SummaryCards';
 import TaskDetailDrawer from '../components/TaskDetailDrawer';
 import useAuth from '../app/auth/useAuth';
 import useTaskWorkspace, { buildMetrics, filterTasksForUser } from '../features/tasks/useTaskWorkspace';
 import API_LIST from '../API';
 import WorkspaceShell from '../components/layout/WorkspaceShell';
+
+function toDateKey(value) {
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return null;
+  return parsed.toISOString().split('T')[0];
+}
+
+function PersonalCalendarView({ tasks, onOpenTask }) {
+  const calendarRef = useRef(null);
+  const todayRef = useRef(null);
+  const today = new Date();
+  const todayKey = toDateKey(today);
+  const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+  const currentWeekStart = new Date(today);
+  currentWeekStart.setDate(today.getDate() - today.getDay());
+  const firstVisibleMonth = new Date(currentWeekStart.getFullYear(), currentWeekStart.getMonth() - 1, 1);
+  const monthSections = Array.from({ length: 5 }, (_, index) => {
+    const sectionMonth = new Date(firstVisibleMonth.getFullYear(), firstVisibleMonth.getMonth() + index, 1);
+    const sectionStart = new Date(sectionMonth);
+    sectionStart.setDate(sectionMonth.getDate() - sectionMonth.getDay());
+    const nextMonth = new Date(sectionMonth.getFullYear(), sectionMonth.getMonth() + 1, 1);
+    const sectionEnd = new Date(nextMonth);
+    sectionEnd.setDate(0);
+    sectionEnd.setDate(sectionEnd.getDate() + (6 - sectionEnd.getDay()));
+    const totalDays = Math.round((sectionEnd - sectionStart) / 86400000) + 1;
+
+    return {
+      key: `${sectionMonth.getFullYear()}-${sectionMonth.getMonth()}`,
+      month: sectionMonth,
+      label: sectionMonth.toLocaleDateString('es-MX', { month: 'long', year: 'numeric' }),
+      days: Array.from({ length: totalDays }, (_, dayIndex) => {
+        const date = new Date(sectionStart);
+        date.setDate(sectionStart.getDate() + dayIndex);
+        return date;
+      }),
+    };
+  });
+  const tasksByDate = tasks.reduce((acc, task) => {
+    const key = toDateKey(task.dueDate);
+    if (!key) return acc;
+    acc[key] = [...(acc[key] || []), task];
+    return acc;
+  }, {});
+  Object.keys(tasksByDate).forEach((key) => {
+    tasksByDate[key].sort((a, b) => new Date(a.dueDate || 0) - new Date(b.dueDate || 0));
+  });
+  const monthLabel = monthStart.toLocaleDateString('es-MX', { month: 'long', year: 'numeric' });
+
+  useEffect(() => {
+    if (!calendarRef.current || !todayRef.current) return;
+    calendarRef.current.scrollTop = Math.max(0, todayRef.current.offsetTop - calendarRef.current.offsetTop - 8);
+  }, [todayKey, tasks.length]);
+
+  return (
+    <section className="admin-calendar-card dev-calendar-card">
+      <div className="panel-header">
+        <div>
+          <h2>Calendario</h2>
+          <p>Fechas límite de tus tareas asignadas.</p>
+        </div>
+        <span className="admin-select-chip">{monthLabel}</span>
+      </div>
+
+      <div className="admin-calendar-scroll" ref={calendarRef}>
+        {monthSections.map((section) => (
+          <div key={section.key} className="admin-calendar-month-section">
+            <h3>{section.label}</h3>
+            <div className="admin-calendar-weekdays">
+              {['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'].map((day) => <span key={day}>{day}</span>)}
+            </div>
+            <div className="admin-calendar-grid">
+              {section.days.map((day) => {
+                const key = toDateKey(day);
+                const dayTasks = tasksByDate[key] || [];
+                const isCurrentMonth = day.getMonth() === section.month.getMonth();
+                const isToday = key === todayKey && isCurrentMonth;
+                return (
+                  <article
+                    key={`${section.key}-${key}`}
+                    ref={isToday ? todayRef : null}
+                    className={`admin-calendar-day ${isCurrentMonth ? '' : 'muted'} ${dayTasks.length ? 'has-tasks' : ''} ${isToday ? 'today' : ''}`}
+                  >
+                    <div className="admin-calendar-day-header">
+                      <strong>{day.getDate()}</strong>
+                      {isToday && <em>Hoy</em>}
+                      {dayTasks.length > 0 && <span>{dayTasks.length}</span>}
+                    </div>
+                    <div className="admin-calendar-task-list">
+                      {dayTasks.slice(0, 3).map((task) => (
+                        <button key={task.id} type="button" className={`admin-calendar-task priority-${task.priority}`} onClick={() => onOpenTask(task)}>
+                          <span>{task.taskId || `#${task.id}`}</span>
+                          {task.title}
+                        </button>
+                      ))}
+                      {dayTasks.length > 3 && <small>+{dayTasks.length - 3} más</small>}
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
 
 function DeveloperDashboard() {
   const [activeSection, setActiveSection] = useState('overview');
@@ -56,6 +163,8 @@ function DeveloperDashboard() {
       .slice(0, 3),
     [personalTasks]
   );
+  const nextDeadline = upcomingDeadlines[0];
+  const activeTasks = useMemo(() => personalTasks.filter((task) => !task.done), [personalTasks]);
 
   const summaryItems = [
     { key: 'total', label: 'Mis tareas', tone: 'neutral', helper: `Asignadas a ti`, icon: <ChecklistRoundedIcon fontSize="small" /> },
@@ -81,6 +190,7 @@ function DeveloperDashboard() {
       navItems={navItems}
       activeNav={activeSection}
       accent="violet"
+      variant="admin-command developer-command"
     >
       {error && (
         <section className="error-banner" role="alert">
@@ -89,17 +199,18 @@ function DeveloperDashboard() {
         </section>
       )}
 
-      <section className="page-hero">
+      <section className="page-hero dev-command-hero">
         <div>
-          <h1 className="page-title">Hola {user.name.split(' ')[0]}, este es tu workspace 👋</h1>
+          <h1 className="page-title">Hola {user.name.split(' ')[0]} 👋</h1>
           <p className="page-subtitle">
-            Revisa tus tareas asignadas, sigue tu progreso del sprint y completa el trabajo sin ruido.
+            Aquí tienes tus tareas, próximos vencimientos y progreso del día.
           </p>
         </div>
-        <div className="progress-callout">
+        <div className="dev-focus-card">
           <div className="progress-ring">{completedPercent}%</div>
           <div>
-            <strong>Progreso del sprint</strong>
+            <span>{activeSprint}</span>
+            <strong>Progreso personal</strong>
             <p>{personalMetrics.completed} de {personalMetrics.total} tareas completadas</p>
             <div className="progress-track">
               <div className="progress-fill violet" style={{ width: `${completedPercent}%` }} />
@@ -110,14 +221,31 @@ function DeveloperDashboard() {
 
       <SummaryCards metrics={personalMetrics} items={summaryItems} />
 
+      <div className="segmented-control dev-segmented-control">
+        <button type="button" className={activeSection === 'overview' ? 'active' : ''} onClick={() => setActiveSection('overview')}>
+          <DashboardRoundedIcon fontSize="small" />
+          Resumen
+        </button>
+        <button type="button" className={activeSection === 'tasks' ? 'active' : ''} onClick={() => setActiveSection('tasks')}>
+          <ChecklistRoundedIcon fontSize="small" />
+          Mis tareas
+        </button>
+        <button type="button" className={activeSection === 'calendar' ? 'active' : ''} onClick={() => setActiveSection('calendar')}>
+          <CalendarMonthRoundedIcon fontSize="small" />
+          Calendario
+        </button>
+      </div>
+
       {activeSection === 'overview' && (
-        <section className="developer-grid">
-          <article className="panel-surface">
+        <>
+        <section className="dev-command-grid">
+          <article className="dev-primary-panel">
             <div className="panel-header">
               <div>
-                <h2>Mis tareas</h2>
-                <p>{activeSprint}</p>
+                <h2>Foco de trabajo</h2>
+                <p>{activeSprint} · {activeTasks.length} tareas activas</p>
               </div>
+              <span className="admin-select-chip"><BoltRoundedIcon fontSize="small" /> En progreso</span>
             </div>
             {isLoading ? (
               <div className="loading-state" role="status">
@@ -149,8 +277,26 @@ function DeveloperDashboard() {
             )}
           </article>
 
-          <div className="developer-side-column">
-            <article className="panel-surface">
+          <div className="dev-side-stack">
+            <article className="dev-deadline-card">
+              <div className="panel-header">
+                <div>
+                  <h2>Siguiente entrega</h2>
+                  <p>Prioridad inmediata</p>
+                </div>
+                <WarningAmberRoundedIcon fontSize="small" />
+              </div>
+              {nextDeadline ? (
+                <button type="button" className="dev-next-task" onClick={() => openTaskDetails(nextDeadline)}>
+                  <strong>{nextDeadline.title}</strong>
+                  <span>{nextDeadline.taskId || `#${nextDeadline.id}`} · {nextDeadline.dueDate ? new Date(nextDeadline.dueDate).toLocaleDateString('es-MX') : 'Sin fecha'}</span>
+                </button>
+              ) : (
+                <p style={{ color: 'var(--text-secondary)' }}>No tienes vencimientos próximos.</p>
+              )}
+            </article>
+
+            <article className="dev-side-card">
               <div className="panel-header">
                 <div>
                   <h2>Actividad reciente</h2>
@@ -172,35 +318,19 @@ function DeveloperDashboard() {
               </div>
             </article>
 
-            <article className="panel-surface">
-              <div className="panel-header">
-                <div>
-                  <h2>Próximos vencimientos</h2>
-                  <p>Prioriza lo urgente</p>
-                </div>
-              </div>
-              <div className="deadline-list">
-                {upcomingDeadlines.map((task) => (
-                  <div key={task.id} className="deadline-item">
-                    <strong>{task.title}</strong>
-                    <span>{task.dueDate ? new Date(task.dueDate).toLocaleDateString('es-MX') : 'Sin fecha'}</span>
-                  </div>
-                ))}
-                {!upcomingDeadlines.length && <p style={{ color: 'var(--text-secondary)' }}>No tienes vencimientos próximos.</p>}
-              </div>
-            </article>
-
-            <article className="panel-surface compact">
-              <div className="mini-kpi-row">
-                <div>
-                  <strong>{Math.round(totalHours)}h</strong>
-                  <span>Horas registradas</span>
-                </div>
-                <AccessTimeRoundedIcon fontSize="small" />
-              </div>
-            </article>
+            <div className="dev-side-mini-grid">
+              <div className="admin-mini-stat"><AccessTimeRoundedIcon fontSize="small" /><strong>{Math.round(totalHours)}h</strong><span>Horas</span></div>
+              <div className="admin-mini-stat"><TaskAltRoundedIcon fontSize="small" /><strong>{completedPercent}%</strong><span>Progreso</span></div>
+            </div>
           </div>
         </section>
+
+        <section className="dev-mini-grid">
+          <div className="admin-mini-stat"><PendingActionsRoundedIcon fontSize="small" /><strong>{activeTasks.length}</strong><span>Tareas activas</span></div>
+          <div className="admin-mini-stat"><TaskAltRoundedIcon fontSize="small" /><strong>{personalMetrics.completed}</strong><span>Completadas</span></div>
+          <div className="admin-mini-stat"><AccessTimeRoundedIcon fontSize="small" /><strong>{Math.round(totalHours)}h</strong><span>Horas registradas</span></div>
+        </section>
+        </>
       )}
 
       {activeSection === 'tasks' && (
@@ -224,17 +354,7 @@ function DeveloperDashboard() {
       )}
 
       {activeSection === 'calendar' && (
-        <section className="panel-surface">
-          <div className="panel-header"><div><h2>Calendario</h2><p>Fechas importantes de tus tareas</p></div></div>
-          <div className="deadline-list">
-            {upcomingDeadlines.map((task) => (
-              <div key={task.id} className="deadline-item">
-                <strong>{task.title}</strong>
-                <span>{task.dueDate ? new Date(task.dueDate).toLocaleDateString('es-MX') : 'Sin fecha'}</span>
-              </div>
-            ))}
-          </div>
-        </section>
+        <PersonalCalendarView tasks={visibleTasks} onOpenTask={openTaskDetails} />
       )}
 
       {activeSection === 'activity' && (
