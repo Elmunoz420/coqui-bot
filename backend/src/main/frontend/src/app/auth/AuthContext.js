@@ -1,21 +1,6 @@
 import React, { createContext, useCallback, useMemo, useState } from 'react';
 
-const STORAGE_KEY = 'coqui_mock_session';
-
-const MOCK_USERS = {
-  admin: {
-    id: 'admin-fernanda',
-    username: 'fernanda.admin',
-    name: 'Fernanda Jiménez',
-    role: 'admin',
-  },
-  developer: {
-    id: 'dev-fernanda',
-    username: 'fernanda',
-    name: 'Fernanda Jiménez',
-    role: 'developer',
-  },
-};
+const STORAGE_KEY = 'coqui_session';
 
 export const AuthContext = createContext(null);
 
@@ -33,14 +18,60 @@ function loadSession() {
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(loadSession);
 
-  const loginAs = useCallback((role) => {
-    const nextUser = MOCK_USERS[role];
-    if (!nextUser) return;
+  const login = useCallback(async ({ username, password }) => {
+    const response = await fetch('/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
+    });
+
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      throw new Error(payload.message || 'No se pudo iniciar sesión');
+    }
+
+    const nextUser = {
+      id: payload.id,
+      username: payload.username,
+      name: payload.name || payload.username,
+      role: payload.role || 'developer',
+      status: payload.status,
+    };
+
     setUser(nextUser);
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(nextUser));
     } catch {}
+    return nextUser;
   }, []);
+
+  const register = useCallback(async ({ name, username, password, role }) => {
+    const response = await fetch('/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, username, password, role }),
+    });
+
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      throw new Error(payload.message || 'No se pudo crear la cuenta');
+    }
+
+    const nextUser = {
+      id: payload.id,
+      username: payload.username,
+      name: payload.name || payload.username,
+      role: payload.role || 'developer',
+      status: payload.status,
+    };
+
+    setUser(nextUser);
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(nextUser));
+    } catch {}
+    return nextUser;
+  }, []);
+
 
   const logout = useCallback(() => {
     setUser(null);
@@ -51,10 +82,11 @@ export function AuthProvider({ children }) {
 
   const value = useMemo(() => ({
     user,
-    loginAs,
+    login,
+    register,
     logout,
     isAuthenticated: Boolean(user),
-  }), [loginAs, logout, user]);
+  }), [login, logout, register, user]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
