@@ -456,6 +456,19 @@ function AdminDashboard() {
     user,
     logout,
   } = useAuth();
+
+  const [coquiInsight, setCoquiInsight] = React.useState({
+    title: 'Coqui suggestion',
+    subtitle: 'Cargando análisis del equipo...',
+    bullets: [{ label: 'Estado', value: 'Conectando con Coqui...' }]
+  });
+
+  React.useEffect(() => {
+    fetch('/api/ai/insights/admin')
+      .then(r => r.json())
+      .then(data => setCoquiInsight(data))
+      .catch(() => {});
+  }, []);
   const {
     isLoading,
     isInserting,
@@ -582,14 +595,10 @@ function AdminDashboard() {
       {activeSection === 'overview' && (
         <>
           <AIGeneratedInsightPanel
-            title="Coqui suggestion"
-            subtitle="Resumen ejecutivo sugerido para priorizar al equipo."
+            title={coquiInsight.title}
+            subtitle={coquiInsight.subtitle}
             tone="emerald"
-            bullets={[
-              { label: 'Riesgo principal', value: 'Revisar tareas activas sin fecha límite o sin responsable claro.' },
-              { label: 'Sugerencia', value: 'Balancear carga entre desarrolladores antes del siguiente cierre de sprint.' },
-              { label: 'Próximo análisis', value: 'Conectar este espacio con métricas reales y recomendaciones del modelo.' },
-            ]}
+            bullets={coquiInsight.bullets || []}
           />
 
           <section className="admin-dashboard-grid">
