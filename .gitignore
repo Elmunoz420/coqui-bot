@@ -3,10 +3,17 @@
 **/target/**
 **/application-local.properties
 **/wallet/
+**/Wallet*/
 
 # Log files
 *.log
+*.log.*
 *.log.*.gz
+*.tmp
+
+# OS generated files
+.DS_Store
+**/.DS_Store
 
 # Environment / secret files
 .env
