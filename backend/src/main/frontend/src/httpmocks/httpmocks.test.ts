@@ -11,7 +11,7 @@ describe('MSW task API mocks', () => {
   test('crear tarea', async () => {
     const payload = {
       description: 'Crear evidencia con MSW',
-      descripcion: 'Mock HTTP sin backend real',
+      descripcion: 'Mock HTTP ',
       prioridad: 'alta',
       sprint: 'Sprint 2',
       assignedUser: 'Fernanda',
@@ -28,7 +28,7 @@ describe('MSW task API mocks', () => {
     ).resolves.toEqual(expect.objectContaining({
       id: 200,
       description: 'Crear evidencia con MSW',
-      descripcion: 'Mock HTTP sin backend real',
+      descripcion: 'Mock HTTP',
       prioridad: 'alta',
       estado: 'pendiente',
       done: false,
