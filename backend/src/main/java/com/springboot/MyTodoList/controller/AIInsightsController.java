@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.stream.Collectors;
 
 @RestController
@@ -91,8 +92,19 @@ public class AIInsightsController {
             List<Map<String, Object>> content = (List<Map<String, Object>>) response.getBody().get("content");
             String json = (String) content.get(0).get("text");
             // Parse the JSON string into a Map
-            org.springframework.boot.json.JacksonJsonParser parser = new org.springframework.boot.json.JacksonJsonParser();
-            Map<String, Object> result = parser.parseMap(json);
+            System.out.println("CLAUDE_RAW_RESPONSE: " + json);
+            // Clean markdown if present
+            String cleanJson = json.trim();
+            if (cleanJson.contains("```")) {
+                cleanJson = cleanJson.replaceAll("```json", "").replaceAll("```", "").trim();
+            }
+            int start = cleanJson.indexOf('{');
+            int end = cleanJson.lastIndexOf('}');
+            if (start >= 0 && end >= 0) {
+                cleanJson = cleanJson.substring(start, end + 1);
+            }
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> result = mapper.readValue(cleanJson, Map.class);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             Map<String, Object> fallback = new HashMap<>();
