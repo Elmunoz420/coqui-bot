@@ -11,7 +11,7 @@ describe('MSW task API mocks', () => {
   test('crear tarea', async () => {
     const payload = {
       description: 'Crear evidencia con MSW',
-      descripcion: 'Mock HTTP ',
+      descripcion: 'Mock HTTP',
       prioridad: 'alta',
       sprint: 'Sprint 2',
       assignedUser: 'Fernanda',
