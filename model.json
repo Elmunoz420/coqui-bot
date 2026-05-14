@@ -1,0 +1,943 @@
+{
+  "configuration" : { },
+  "description" : "Telegram-based task management system deployed on OCI",
+  "documentation" : {
+    "decisions" : [ {
+      "content" : "# 1. Record architecture decisions\n\nDate: 2026-05-14\n\n## Status\n\nAccepted\n\n## Context\n\nWe need to record the architectural decisions made on this project.\n\n## Decision\n\nWe will use Architecture Decision Records, as [described by Michael Nygard](http://thinkrelevance.com/blog/2011/11/15/documenting-architecture-decisions).\n\n## Consequences\n\nSee Michael Nygard's article, linked above. For a lightweight ADR toolset, see Nat Pryce's [adr-tools](https://github.com/npryce/adr-tools).\n",
+      "date" : "2026-05-14T00:00:00Z",
+      "format" : "Markdown",
+      "id" : "1",
+      "status" : "Accepted",
+      "title" : "Record architecture decisions"
+    }, {
+      "content" : "# 2. Architectural Styles Selection for COQUI_BOT\n\nDate: 2026-05-14\n\n## Status\n\nAccepted\n\n## Context\n\nThe system requires a task management bot accessible via Telegram and a web browser,\nwith AI features, deployed on OCI. We evaluated the 9 architectural styles covered\nin the course to determine which fit each layer.\n\n## Decision\n\nWe apply the following styles:\n\n| Style | Where applied |\n|-------|--------------|\n| **Layered (N-tier)** | Spring Boot backend (Controller → Service → Repository → DB) |\n| **Event-driven** | Telegram bot long-polling loop; bot events trigger BotActions handlers |\n| **Microkernel** | Bot command dispatcher: core plugin + BotActions as extension points |\n| **Service-Based** | REST API exposes discrete services: /todolist, /users, /api/ai/chat |\n| **Pipeline** | AI RAG pipeline: query → embedding → vector search → LLM → response |\n| **Monolithic** | Single deployable JAR containing frontend + backend + bot |\n| **Client-Server** | React SPA (client) ↔ Spring Boot REST API (server) |\n\n## Consequences\n\n- Single JAR simplifies deployment to OKE but limits independent scaling of bot vs API.\n- Layered style enforces separation of concerns in backend code.\n- Event-driven bot architecture decouples Telegram interaction from business logic.",
+      "date" : "2026-05-14T00:00:00Z",
+      "format" : "Markdown",
+      "id" : "2",
+      "status" : "Accepted",
+      "title" : "Architectural Styles Selection for COQUI_BOT"
+    }, {
+      "content" : "# 3. Deployment on Oracle Kubernetes Engine with Single Container\n\nDate: 2026-05-14\n\n## Status\n\nAccepted\n\n## Context\n\nThe team has 5 OCI accounts with limited credits. We need a deployment strategy\nthat minimizes cost while supporting the full stack (React + Spring Boot + Telegram bot + Oracle ATP).\n\n## Decision\n\nDeploy everything as a single Docker container (Spring Boot JAR with embedded React)\non OKE (namespace: mtdrworkshop), using a shared cluster owned by Esteban.\nOracle ATP (Always Free tier, 20GB) serves as the database.\nThe Anthropic Claude API key is stored as a Kubernetes Secret.\n\n## Consequences\n\n- Single image simplifies CI/CD: one build.sh, one OCIR push.\n- OCI Always Free ATP avoids DB charges.\n- Cannot scale frontend independently from backend.\n- All team members depend on Esteban's cluster availability.\n- Must coordinate OCIR image updates across the team.\n",
+      "date" : "2026-05-14T00:00:00Z",
+      "format" : "Markdown",
+      "id" : "3",
+      "status" : "Accepted",
+      "title" : "Deployment on Oracle Kubernetes Engine with Single Container"
+    } ]
+  },
+  "id" : 1,
+  "lastModifiedDate" : "2026-05-14T22:54:23Z",
+  "model" : {
+    "deploymentNodes" : [ {
+      "children" : [ {
+        "children" : [ {
+          "children" : [ {
+            "containerInstances" : [ {
+              "containerId" : "9",
+              "environment" : "OCI Production",
+              "id" : "44",
+              "instanceId" : 1,
+              "properties" : {
+                "structurizr.dsl.identifier" : "afae918a-fdba-420e-961c-8bc1069fbbc2"
+              },
+              "relationships" : [ {
+                "description" : "JDBC/UCP queries",
+                "destinationId" : "48",
+                "id" : "49",
+                "linkedRelationshipId" : "20",
+                "sourceId" : "44",
+                "technology" : "JDBC"
+              } ],
+              "tags" : "Container Instance"
+            } ],
+            "description" : "todolistapp-springboot-deployment",
+            "environment" : "OCI Production",
+            "id" : "43",
+            "instances" : "1",
+            "name" : "Pod x2 replicas",
+            "properties" : {
+              "structurizr.dsl.identifier" : "7aeb3c47-c0ba-4f80-b098-a7d2dcd620d1"
+            },
+            "tags" : "Element,Deployment Node"
+          }, {
+            "environment" : "OCI Production",
+            "id" : "45",
+            "infrastructureNodes" : [ {
+              "description" : "Routes port 80 to 8080",
+              "environment" : "OCI Production",
+              "id" : "46",
+              "name" : "OCI Load Balancer",
+              "properties" : {
+                "structurizr.dsl.identifier" : "297dd139-6536-4f66-8cf0-b89c85cc7201"
+              },
+              "tags" : "Element,Infrastructure Node"
+            } ],
+            "instances" : "1",
+            "name" : "LoadBalancer Service port 80",
+            "properties" : {
+              "structurizr.dsl.identifier" : "70243911-664a-4b20-9833-bb84f29f469f"
+            },
+            "tags" : "Element,Deployment Node"
+          } ],
+          "environment" : "OCI Production",
+          "id" : "42",
+          "instances" : "1",
+          "name" : "Namespace mtdrworkshop",
+          "properties" : {
+            "structurizr.dsl.identifier" : "3dee9203-dfa7-4da0-8499-c7f82e9bb50c"
+          },
+          "tags" : "Element,Deployment Node"
+        } ],
+        "environment" : "OCI Production",
+        "id" : "41",
+        "instances" : "1",
+        "name" : "OKE Cluster mx-queretaro-1",
+        "properties" : {
+          "structurizr.dsl.identifier" : "23a3f0b3-cd1b-439b-94ed-4d428bc978ae"
+        },
+        "tags" : "Element,Deployment Node"
+      }, {
+        "containerInstances" : [ {
+          "containerId" : "18",
+          "environment" : "OCI Production",
+          "id" : "48",
+          "instanceId" : 1,
+          "properties" : {
+            "structurizr.dsl.identifier" : "a7383ba1-770b-4231-8da5-59b882305551"
+          },
+          "tags" : "Container Instance"
+        } ],
+        "environment" : "OCI Production",
+        "id" : "47",
+        "instances" : "1",
+        "name" : "Oracle ATP Always Free",
+        "properties" : {
+          "structurizr.dsl.identifier" : "76863a8d-ca22-4a75-b3ec-8ac6b0b8b0bd"
+        },
+        "tags" : "Element,Deployment Node"
+      }, {
+        "environment" : "OCI Production",
+        "id" : "50",
+        "infrastructureNodes" : [ {
+          "description" : "Docker image stored in OCI Container Registry",
+          "environment" : "OCI Production",
+          "id" : "51",
+          "name" : "agileimage 0.1",
+          "properties" : {
+            "structurizr.dsl.identifier" : "27c4d3ec-c3d4-4f7c-a430-48f15210fcc0"
+          },
+          "tags" : "Element,Infrastructure Node"
+        } ],
+        "instances" : "1",
+        "name" : "OCIR mx-queretaro-1",
+        "properties" : {
+          "structurizr.dsl.identifier" : "ee2e59ca-ec68-40df-ba8e-ec6c3e987d25"
+        },
+        "tags" : "Element,Deployment Node"
+      } ],
+      "environment" : "OCI Production",
+      "id" : "40",
+      "instances" : "1",
+      "name" : "Oracle Cloud Infrastructure",
+      "properties" : {
+        "structurizr.dsl.identifier" : "d58f381f-c32c-4b05-b5c0-0b0a2e29b348"
+      },
+      "tags" : "Element,Deployment Node"
+    }, {
+      "children" : [ {
+        "containerInstances" : [ {
+          "containerId" : "8",
+          "environment" : "OCI Production",
+          "id" : "54",
+          "instanceId" : 1,
+          "properties" : {
+            "structurizr.dsl.identifier" : "4aca2106-e091-475b-944a-7f5a832b78c0"
+          },
+          "relationships" : [ {
+            "description" : "REST API calls",
+            "destinationId" : "44",
+            "id" : "55",
+            "linkedRelationshipId" : "19",
+            "sourceId" : "54",
+            "technology" : "HTTP/REST"
+          } ],
+          "tags" : "Container Instance"
+        } ],
+        "environment" : "OCI Production",
+        "id" : "53",
+        "instances" : "1",
+        "name" : "Web Browser",
+        "properties" : {
+          "structurizr.dsl.identifier" : "f8addfc2-6ae6-4139-b0b9-ccd370c6b6b4"
+        },
+        "tags" : "Element,Deployment Node"
+      } ],
+      "environment" : "OCI Production",
+      "id" : "52",
+      "instances" : "1",
+      "name" : "User Devices",
+      "properties" : {
+        "structurizr.dsl.identifier" : "7149e3b1-d037-4d2e-96b7-5c105ce5aebe"
+      },
+      "tags" : "Element,Deployment Node"
+    } ],
+    "people" : [ {
+      "description" : "Uses the React web UI and Telegram bot to manage tasks",
+      "id" : "1",
+      "name" : "Developer / Team Member",
+      "properties" : {
+        "structurizr.dsl.identifier" : "developer"
+      },
+      "relationships" : [ {
+        "description" : "Uses via browser",
+        "destinationId" : "8",
+        "id" : "29",
+        "sourceId" : "1",
+        "tags" : "Relationship"
+      }, {
+        "description" : "Uses via browser",
+        "destinationId" : "7",
+        "id" : "30",
+        "linkedRelationshipId" : "29",
+        "sourceId" : "1"
+      } ],
+      "tags" : "Element,Person"
+    }, {
+      "description" : "Interacts with the system via Telegram chat commands",
+      "id" : "2",
+      "name" : "Telegram User",
+      "properties" : {
+        "structurizr.dsl.identifier" : "telegramUser"
+      },
+      "relationships" : [ {
+        "description" : "Sends commands",
+        "destinationId" : "4",
+        "id" : "31",
+        "sourceId" : "2",
+        "tags" : "Relationship"
+      } ],
+      "tags" : "Element,Person"
+    }, {
+      "description" : "Monitors system via developer insights dashboard",
+      "id" : "3",
+      "name" : "Admin",
+      "properties" : {
+        "structurizr.dsl.identifier" : "admin"
+      },
+      "relationships" : [ {
+        "description" : "Views developer dashboard",
+        "destinationId" : "8",
+        "id" : "32",
+        "sourceId" : "3",
+        "tags" : "Relationship"
+      }, {
+        "description" : "Views developer dashboard",
+        "destinationId" : "7",
+        "id" : "33",
+        "linkedRelationshipId" : "32",
+        "sourceId" : "3"
+      } ],
+      "tags" : "Element,Person"
+    } ],
+    "softwareSystems" : [ {
+      "description" : "External messaging platform",
+      "documentation" : { },
+      "id" : "4",
+      "name" : "Telegram Bot API",
+      "properties" : {
+        "structurizr.dsl.identifier" : "telegramAPI"
+      },
+      "relationships" : [ {
+        "description" : "Delivers updates via long-poll",
+        "destinationId" : "13",
+        "id" : "34",
+        "sourceId" : "4",
+        "tags" : "Relationship",
+        "technology" : "HTTPS"
+      }, {
+        "description" : "Delivers updates via long-poll",
+        "destinationId" : "9",
+        "id" : "35",
+        "linkedRelationshipId" : "34",
+        "sourceId" : "4",
+        "technology" : "HTTPS"
+      }, {
+        "description" : "Delivers updates via long-poll",
+        "destinationId" : "7",
+        "id" : "36",
+        "linkedRelationshipId" : "34",
+        "sourceId" : "4",
+        "technology" : "HTTPS"
+      } ],
+      "tags" : "Element,Software System,External"
+    }, {
+      "description" : "LLM API for AI chat and insights",
+      "documentation" : { },
+      "id" : "5",
+      "name" : "Anthropic Claude API",
+      "properties" : {
+        "structurizr.dsl.identifier" : "anthropicAPI"
+      },
+      "tags" : "Element,Software System,External"
+    }, {
+      "description" : "Stores Docker images",
+      "documentation" : { },
+      "id" : "6",
+      "name" : "OCI Container Registry",
+      "properties" : {
+        "structurizr.dsl.identifier" : "ociRegistry"
+      },
+      "tags" : "Element,Software System,External"
+    }, {
+      "containers" : [ {
+        "description" : "Task management web interface with AI chat",
+        "documentation" : { },
+        "id" : "8",
+        "name" : "React SPA",
+        "properties" : {
+          "structurizr.dsl.identifier" : "reactSPA"
+        },
+        "relationships" : [ {
+          "description" : "REST API calls",
+          "destinationId" : "9",
+          "id" : "19",
+          "sourceId" : "8",
+          "tags" : "Relationship",
+          "technology" : "HTTP/REST"
+        } ],
+        "tags" : "Element,Container,Web Browser",
+        "technology" : "React 18 + Material UI"
+      }, {
+        "components" : [ {
+          "description" : "REST endpoints for /todolist CRUD",
+          "documentation" : { },
+          "id" : "10",
+          "name" : "ToDoItemController",
+          "properties" : {
+            "structurizr.dsl.identifier" : "todoController"
+          },
+          "relationships" : [ {
+            "description" : "delegates",
+            "destinationId" : "14",
+            "id" : "21",
+            "sourceId" : "10",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Spring MVC Controller"
+        }, {
+          "description" : "REST endpoints for /users",
+          "documentation" : { },
+          "id" : "11",
+          "name" : "UserController",
+          "properties" : {
+            "structurizr.dsl.identifier" : "userController"
+          },
+          "tags" : "Element,Component",
+          "technology" : "Spring MVC Controller"
+        }, {
+          "description" : "POST /api/ai/chat and developer insights",
+          "documentation" : { },
+          "id" : "12",
+          "name" : "AIInsightsController",
+          "properties" : {
+            "structurizr.dsl.identifier" : "aiController"
+          },
+          "relationships" : [ {
+            "description" : "POST /v1/messages",
+            "destinationId" : "5",
+            "id" : "23",
+            "sourceId" : "12",
+            "tags" : "Relationship",
+            "technology" : "HTTPS"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Spring MVC Controller"
+        }, {
+          "description" : "Telegram long-polling loop and command dispatcher",
+          "documentation" : { },
+          "id" : "13",
+          "name" : "BotConsumer / BotActions",
+          "properties" : {
+            "structurizr.dsl.identifier" : "botConsumer"
+          },
+          "relationships" : [ {
+            "description" : "delegates task operations",
+            "destinationId" : "14",
+            "id" : "26",
+            "sourceId" : "13",
+            "tags" : "Relationship"
+          }, {
+            "description" : "AI requests",
+            "destinationId" : "5",
+            "id" : "27",
+            "sourceId" : "13",
+            "tags" : "Relationship",
+            "technology" : "HTTPS"
+          }, {
+            "description" : "Sends responses",
+            "destinationId" : "4",
+            "id" : "37",
+            "sourceId" : "13",
+            "tags" : "Relationship",
+            "technology" : "HTTPS"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Spring Component"
+        }, {
+          "description" : "Business logic: Tarea to ToDoItem translation",
+          "documentation" : { },
+          "id" : "14",
+          "name" : "ToDoItemService",
+          "properties" : {
+            "structurizr.dsl.identifier" : "taskService"
+          },
+          "relationships" : [ {
+            "description" : "queries database",
+            "destinationId" : "18",
+            "id" : "22",
+            "sourceId" : "14",
+            "tags" : "Relationship",
+            "technology" : "JDBC"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Spring Service"
+        }, {
+          "description" : "DataSource and UCP connection pool",
+          "documentation" : { },
+          "id" : "15",
+          "name" : "OracleConfiguration",
+          "properties" : {
+            "structurizr.dsl.identifier" : "oracleConfig"
+          },
+          "relationships" : [ {
+            "description" : "configures connection pool",
+            "destinationId" : "18",
+            "id" : "28",
+            "sourceId" : "15",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Spring Configuration"
+        }, {
+          "description" : "Spring Security session-based auth, BCrypt",
+          "documentation" : { },
+          "id" : "16",
+          "name" : "SecurityConfig",
+          "properties" : {
+            "structurizr.dsl.identifier" : "securityConfig"
+          },
+          "tags" : "Element,Component",
+          "technology" : "Spring Security"
+        }, {
+          "description" : "Serves React SPA for all non-API routes",
+          "documentation" : { },
+          "id" : "17",
+          "name" : "SpaForwardController",
+          "properties" : {
+            "structurizr.dsl.identifier" : "spaForward"
+          },
+          "tags" : "Element,Component",
+          "technology" : "Spring MVC Controller"
+        } ],
+        "description" : "REST API + Telegram bot polling + AI integration",
+        "documentation" : { },
+        "id" : "9",
+        "name" : "Spring Boot Application",
+        "properties" : {
+          "structurizr.dsl.identifier" : "springBoot"
+        },
+        "relationships" : [ {
+          "description" : "JDBC/UCP queries",
+          "destinationId" : "18",
+          "id" : "20",
+          "sourceId" : "9",
+          "tags" : "Relationship",
+          "technology" : "JDBC"
+        }, {
+          "description" : "POST /v1/messages",
+          "destinationId" : "5",
+          "id" : "24",
+          "linkedRelationshipId" : "23",
+          "sourceId" : "9",
+          "technology" : "HTTPS"
+        }, {
+          "description" : "Sends responses",
+          "destinationId" : "4",
+          "id" : "38",
+          "linkedRelationshipId" : "37",
+          "sourceId" : "9",
+          "technology" : "HTTPS"
+        } ],
+        "tags" : "Element,Container",
+        "technology" : "Java 22 / Spring Boot 3"
+      }, {
+        "description" : "Autonomous Transaction Processing DB. Tables: TAREA, USUARIO, PROYECTO.",
+        "documentation" : { },
+        "id" : "18",
+        "name" : "Oracle ATP",
+        "properties" : {
+          "structurizr.dsl.identifier" : "oracleATP"
+        },
+        "tags" : "Element,Container,Database",
+        "technology" : "Oracle 19c / ATP Always Free"
+      } ],
+      "description" : "Full-stack task manager with Telegram bot, React UI, and AI features",
+      "documentation" : { },
+      "id" : "7",
+      "name" : "COQUI_BOT System",
+      "properties" : {
+        "structurizr.dsl.identifier" : "coquiBot"
+      },
+      "relationships" : [ {
+        "description" : "POST /v1/messages",
+        "destinationId" : "5",
+        "id" : "25",
+        "linkedRelationshipId" : "23",
+        "sourceId" : "7",
+        "technology" : "HTTPS"
+      }, {
+        "description" : "Sends responses",
+        "destinationId" : "4",
+        "id" : "39",
+        "linkedRelationshipId" : "37",
+        "sourceId" : "7",
+        "technology" : "HTTPS"
+      } ],
+      "tags" : "Element,Software System"
+    } ]
+  },
+  "name" : "COQUI_BOT",
+  "properties" : {
+    "structurizr.inspection.error" : "36",
+    "structurizr.inspection.info" : "0",
+    "structurizr.inspection.ignore" : "0",
+    "structurizr.inspection.warning" : "0"
+  },
+  "views" : {
+    "componentViews" : [ {
+      "automaticLayout" : {
+        "edgeSeparation" : 50,
+        "nodeSeparation" : 50,
+        "rankDirection" : "LeftRight",
+        "rankSeparation" : 100,
+        "vertices" : true
+      },
+      "containerId" : "9",
+      "description" : "Internal components of the Spring Boot application",
+      "elements" : [ {
+        "id" : "4",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "5",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "10",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "11",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "12",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "13",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "14",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "15",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "16",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "17",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "18",
+        "x" : 0,
+        "y" : 0
+      } ],
+      "externalContainerBoundariesVisible" : false,
+      "key" : "Components",
+      "name" : "Component View: COQUI_BOT System - Spring Boot Application",
+      "order" : 4,
+      "relationships" : [ {
+        "id" : "21"
+      }, {
+        "id" : "22"
+      }, {
+        "id" : "23"
+      }, {
+        "id" : "26"
+      }, {
+        "id" : "27"
+      }, {
+        "id" : "28"
+      }, {
+        "id" : "34"
+      }, {
+        "id" : "37"
+      } ]
+    } ],
+    "configuration" : {
+      "styles" : {
+        "elements" : [ {
+          "background" : "#85bbf0",
+          "color" : "#000000",
+          "tag" : "Component"
+        }, {
+          "background" : "#438dd5",
+          "color" : "#ffffff",
+          "tag" : "Container"
+        }, {
+          "background" : "#f5a623",
+          "color" : "#ffffff",
+          "shape" : "Cylinder",
+          "tag" : "Database"
+        }, {
+          "background" : "#999999",
+          "color" : "#ffffff",
+          "tag" : "External"
+        }, {
+          "background" : "#1168bd",
+          "color" : "#ffffff",
+          "shape" : "Person",
+          "tag" : "Person"
+        }, {
+          "background" : "#1168bd",
+          "color" : "#ffffff",
+          "tag" : "Software System"
+        }, {
+          "shape" : "WebBrowser",
+          "tag" : "Web Browser"
+        } ]
+      },
+      "terminology" : { }
+    },
+    "containerViews" : [ {
+      "automaticLayout" : {
+        "edgeSeparation" : 50,
+        "nodeSeparation" : 50,
+        "rankDirection" : "LeftRight",
+        "rankSeparation" : 100,
+        "vertices" : true
+      },
+      "description" : "Internal containers of COQUI_BOT",
+      "elements" : [ {
+        "id" : "1",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "3",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "4",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "5",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "8",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "9",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "18",
+        "x" : 0,
+        "y" : 0
+      } ],
+      "externalSoftwareSystemBoundariesVisible" : false,
+      "key" : "Containers",
+      "name" : "Container View: COQUI_BOT System",
+      "order" : 3,
+      "relationships" : [ {
+        "id" : "19"
+      }, {
+        "id" : "20"
+      }, {
+        "id" : "24"
+      }, {
+        "id" : "29"
+      }, {
+        "id" : "32"
+      }, {
+        "id" : "35"
+      }, {
+        "id" : "38"
+      } ],
+      "softwareSystemId" : "7"
+    } ],
+    "deploymentViews" : [ {
+      "automaticLayout" : {
+        "edgeSeparation" : 50,
+        "nodeSeparation" : 50,
+        "rankDirection" : "LeftRight",
+        "rankSeparation" : 100,
+        "vertices" : true
+      },
+      "description" : "Production deployment on OKE",
+      "elements" : [ {
+        "id" : "40",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "41",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "42",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "43",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "44",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "45",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "46",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "47",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "48",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "50",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "51",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "52",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "53",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "54",
+        "x" : 0,
+        "y" : 0
+      } ],
+      "environment" : "OCI Production",
+      "key" : "Deployment",
+      "name" : "Deployment View: COQUI_BOT System - OCI Production",
+      "order" : 5,
+      "relationships" : [ {
+        "id" : "49"
+      }, {
+        "id" : "55"
+      } ],
+      "softwareSystemId" : "7"
+    } ],
+    "dynamicViews" : [ {
+      "automaticLayout" : {
+        "edgeSeparation" : 50,
+        "nodeSeparation" : 50,
+        "rankDirection" : "LeftRight",
+        "rankSeparation" : 100,
+        "vertices" : true
+      },
+      "description" : "User creates a task via Telegram",
+      "elementId" : "9",
+      "elements" : [ {
+        "id" : "13",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "14",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "18",
+        "x" : 0,
+        "y" : 0
+      } ],
+      "externalBoundariesVisible" : false,
+      "key" : "DynamicTelegramTask",
+      "name" : "Dynamic View: COQUI_BOT System - Spring Boot Application",
+      "order" : 6,
+      "relationships" : [ {
+        "description" : "createTask",
+        "id" : "26",
+        "order" : "1",
+        "response" : false
+      }, {
+        "description" : "queries database",
+        "id" : "22",
+        "order" : "2",
+        "response" : false
+      } ]
+    }, {
+      "automaticLayout" : {
+        "edgeSeparation" : 50,
+        "nodeSeparation" : 50,
+        "rankDirection" : "LeftRight",
+        "rankSeparation" : 100,
+        "vertices" : true
+      },
+      "description" : "Developer requests AI insights via React UI",
+      "elementId" : "9",
+      "elements" : [ {
+        "id" : "5",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "12",
+        "x" : 0,
+        "y" : 0
+      } ],
+      "externalBoundariesVisible" : false,
+      "key" : "DynamicAIChat",
+      "name" : "Dynamic View: COQUI_BOT System - Spring Boot Application",
+      "order" : 7,
+      "relationships" : [ {
+        "description" : "POST /v1/messages Claude Sonnet",
+        "id" : "23",
+        "order" : "1",
+        "response" : false
+      }, {
+        "description" : "Returns AI response",
+        "id" : "23",
+        "order" : "2",
+        "response" : true
+      } ]
+    } ],
+    "systemContextViews" : [ {
+      "automaticLayout" : {
+        "edgeSeparation" : 50,
+        "nodeSeparation" : 50,
+        "rankDirection" : "LeftRight",
+        "rankSeparation" : 100,
+        "vertices" : true
+      },
+      "description" : "COQUI_BOT and its external dependencies",
+      "elements" : [ {
+        "id" : "1",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "3",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "4",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "5",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "7",
+        "x" : 0,
+        "y" : 0
+      } ],
+      "enterpriseBoundaryVisible" : true,
+      "key" : "SystemContext",
+      "name" : "System Context View: COQUI_BOT System",
+      "order" : 2,
+      "relationships" : [ {
+        "id" : "25"
+      }, {
+        "id" : "30"
+      }, {
+        "id" : "33"
+      }, {
+        "id" : "36"
+      }, {
+        "id" : "39"
+      } ],
+      "softwareSystemId" : "7"
+    } ],
+    "systemLandscapeViews" : [ {
+      "automaticLayout" : {
+        "edgeSeparation" : 50,
+        "nodeSeparation" : 50,
+        "rankDirection" : "LeftRight",
+        "rankSeparation" : 100,
+        "vertices" : true
+      },
+      "description" : "All systems and actors",
+      "elements" : [ {
+        "id" : "1",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "2",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "3",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "4",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "5",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "6",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "7",
+        "x" : 0,
+        "y" : 0
+      } ],
+      "enterpriseBoundaryVisible" : true,
+      "key" : "SystemLandscape",
+      "name" : "System Landscape View",
+      "order" : 1,
+      "relationships" : [ {
+        "id" : "25"
+      }, {
+        "id" : "30"
+      }, {
+        "id" : "31"
+      }, {
+        "id" : "33"
+      }, {
+        "id" : "36"
+      }, {
+        "id" : "39"
+      } ]
+    } ]
+  }
+}
