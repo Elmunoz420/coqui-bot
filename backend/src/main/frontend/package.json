@@ -18,7 +18,9 @@
     },
     "scripts": {
         "start": "react-scripts start",
-        "build": "react-scripts build"
+        "build": "react-scripts build",
+        "test": "vitest run",
+        "test:watch": "vitest"
     },
     "eslintConfig": {
         "extends": "react-app"
@@ -27,5 +29,9 @@
         "last 5 versions"
     ],
     "proxy": "http://localhost:8080",
-    "homepage": "."
+    "homepage": ".",
+    "devDependencies": {
+        "msw": "^2.14.6",
+        "vitest": "^4.1.6"
+    }
 }
