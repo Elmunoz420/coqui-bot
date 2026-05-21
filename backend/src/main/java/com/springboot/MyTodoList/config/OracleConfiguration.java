@@ -37,12 +37,20 @@ public class OracleConfiguration {
     @Value("${driver_class_name:${spring.datasource.driver-class-name:oracle.jdbc.OracleDriver}}")
     private String driverClassName;
 
+    @Value("${oracle.net.tns_admin:}")
+    private String tnsAdmin;
+
     @Bean
     public DataSource dataSource() throws SQLException {
         logger.info("Configuring OracleDataSource");
         logger.info("Driver:   {}", driverClassName);
         logger.info("URL:      {}", dbUrl);
         logger.info("Username: {}", dbUser);
+
+        if (tnsAdmin != null && !tnsAdmin.isBlank()) {
+            System.setProperty("oracle.net.tns_admin", tnsAdmin);
+            logger.info("TNS_ADMIN: {}", tnsAdmin);
+        }
 
         OracleDataSource ds = new OracleDataSource();
         ds.setDriverType(driverClassName);

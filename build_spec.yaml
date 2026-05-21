@@ -1,0 +1,55 @@
+version: 0.1
+
+component: build
+
+timeoutInSeconds: 10000
+
+shell: bash
+
+env:
+  variables:
+    IMAGE_NAME: "agileimage"
+    IMAGE_TAG: "0.1"
+    OCI_REGION: "mx-queretaro-1"
+    NAMESPACE: "mtdrworkshop"
+
+  exportedVariables:
+    - IMAGE_NAME
+    - IMAGE_TAG
+    - OCIR_PATH
+
+steps:
+  - type: Command
+    name: "Build Maven project (backend + frontend)"
+    timeoutInSeconds: 600
+    command: |
+      cd backend
+      ./mvnw clean package -DskipTests
+      echo "JAR built: $(ls target/*.jar)"
+
+  - type: Command
+    name: "Set OCIR image path"
+    command: |
+      export TENANCY_NAMESPACE=$(oci os ns get --query 'data' --raw-output)
+      export OCIR_PATH="${OCI_REGION}.ocir.io/${TENANCY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}"
+      echo "OCIR_PATH=${OCIR_PATH}" >> $OCI_BUILD_STAGE_ENVIRONMENT_VARIABLES_FILE
+      echo "Image will be pushed to: ${OCIR_PATH}"
+
+  - type: Command
+    name: "Build Docker image"
+    command: |
+      cd backend
+      docker build -f Dockerfile -t ${OCIR_PATH} .
+      echo "Docker image built: ${OCIR_PATH}"
+
+  - type: Command
+    name: "Push Docker image to OCIR"
+    command: |
+      echo "Pushing ${OCIR_PATH} to OCI Container Registry..."
+      docker push ${OCIR_PATH}
+      echo "Push complete."
+
+outputArtifacts:
+  - name: app_docker_image
+    type: DOCKER_IMAGE
+    location: ${OCIR_PATH}
