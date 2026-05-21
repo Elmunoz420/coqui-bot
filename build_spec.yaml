@@ -52,4 +52,4 @@ steps:
 outputArtifacts:
   - name: app_docker_image
     type: DOCKER_IMAGE
-    location: ${OCIR_PATH}
+    location: ${IMAGE_NAME}:${IMAGE_TAG}
