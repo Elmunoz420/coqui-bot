@@ -48,8 +48,3 @@ steps:
       echo "Pushing ${OCIR_PATH} to OCI Container Registry..."
       docker push ${OCIR_PATH}
       echo "Push complete."
-
-outputArtifacts:
-  - name: app_docker_image
-    type: DOCKER_IMAGE
-    location: ${IMAGE_NAME}:${IMAGE_TAG}
