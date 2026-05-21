@@ -11,7 +11,7 @@ env:
     IMAGE_NAME: "agileimage"
     IMAGE_TAG: "0.1"
     OCI_REGION: "mx-queretaro-1"
-    OCI_USERNAME: "oracleidentitycloudservice/a01645485@tec.mx"
+    OCI_USERNAME: "a01645485@tec.mx"
     OCI_AUTH_TOKEN: "E)WI0dzlg7GxkgPYx>8G"
 
 steps:
