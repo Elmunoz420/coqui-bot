@@ -11,7 +11,7 @@ env:
     IMAGE_NAME: "agileimage"
     IMAGE_TAG: "0.1"
     OCI_REGION: "mx-queretaro-1"
-    OCI_USERNAME: "a01645485@tec.mx"
+    OCI_USERNAME: "oracleidentitycloudservice/a01645485@tec.mx"
 
   exportedVariables:
     - TENANCY_NAMESPACE
@@ -55,8 +55,3 @@ steps:
       docker push "${OCIR_PATH}"
 
       echo "Push complete."
-
-outputArtifacts:
-  - name: app_docker_image
-    type: DOCKER_IMAGE
-    location: ${IMAGE_NAME}:${IMAGE_TAG}
