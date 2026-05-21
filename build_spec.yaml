@@ -12,7 +12,7 @@ env:
     IMAGE_TAG: "0.1"
     OCI_REGION: "mx-queretaro-1"
     OCI_USERNAME: "a01645485@tec.mx"
-    OCI_AUTH_TOKEN: "E)WI0dzlg7GxkgPYx>8G"
+    OCI_AUTH_TOKEN: 'E)WI0dzlg7GxkgPYx>8G'
 
 steps:
   - type: Command
@@ -33,12 +33,14 @@ steps:
 
       TENANCY_NAMESPACE=$(oci os ns get --query 'data' --raw-output)
       OCIR_PATH="${OCI_REGION}.ocir.io/${TENANCY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}"
+      OCIR_USER="${TENANCY_NAMESPACE}/${OCI_USERNAME}"
 
       echo "Using image path: ${OCIR_PATH}"
-      echo "Logging into OCIR..."
+      echo "Logging into OCIR as: ${OCIR_USER}"
+      echo "Token length: ${#OCI_AUTH_TOKEN}"
 
       docker login "${OCI_REGION}.ocir.io" \
-        -u "${TENANCY_NAMESPACE}/${OCI_USERNAME}" \
+        -u "${OCIR_USER}" \
         -p "${OCI_AUTH_TOKEN}"
 
       cd backend
