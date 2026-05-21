@@ -11,8 +11,10 @@ env:
     IMAGE_NAME: "agileimage"
     IMAGE_TAG: "0.1"
     OCI_REGION: "mx-queretaro-1"
+    OCI_USERNAME: "a01645485@tec.mx"
 
   exportedVariables:
+    - TENANCY_NAMESPACE
     - OCIR_PATH
 
 steps:
@@ -32,6 +34,7 @@ steps:
       TENANCY_NAMESPACE=$(oci os ns get --query 'data' --raw-output)
       OCIR_PATH="${OCI_REGION}.ocir.io/${TENANCY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}"
 
+      echo "TENANCY_NAMESPACE=${TENANCY_NAMESPACE}" | tee -a "$OCI_BUILD_STAGE_ENVIRONMENT_VARIABLES_FILE"
       echo "OCIR_PATH=${OCIR_PATH}" | tee -a "$OCI_BUILD_STAGE_ENVIRONMENT_VARIABLES_FILE"
       echo "Image will be pushed to: ${OCIR_PATH}"
 
@@ -42,8 +45,18 @@ steps:
 
       echo "Using image path: ${OCIR_PATH}"
 
+      echo "Logging into OCIR..."
+      echo "${OCI_AUTH_TOKEN}" | docker login "${OCI_REGION}.ocir.io" \
+        -u "${TENANCY_NAMESPACE}/${OCI_USERNAME}" \
+        --password-stdin
+
       cd backend
       docker build -f Dockerfile -t "${OCIR_PATH}" .
       docker push "${OCIR_PATH}"
 
       echo "Push complete."
+
+outputArtifacts:
+  - name: app_docker_image
+    type: DOCKER_IMAGE
+    location: ${IMAGE_NAME}:${IMAGE_TAG}
