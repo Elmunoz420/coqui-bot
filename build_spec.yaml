@@ -39,7 +39,6 @@ steps:
     name: "Build and push Docker image"
     command: |
       set -e
-      source "$OCI_BUILD_STAGE_ENVIRONMENT_VARIABLES_FILE"
 
       echo "Using image path: ${OCIR_PATH}"
 
