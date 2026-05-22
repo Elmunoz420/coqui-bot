@@ -238,7 +238,7 @@ function DeveloperDashboard() {
       <div className="coqui-sprint-banner">
         <span className="coqui-sprint-frog">🐸</span>
         <div className="coqui-sprint-text">
-          <strong>¡Felicidades por ser el Coqui del Sprint 3!</strong>
+          <strong>¡Felicidades por ser el Coqui del Sprint 2!</strong>
           <span>Fernanda Jiménez, el equipo te lo reconoce 🏆</span>
         </div>
         <span className="coqui-sprint-badge">MVP</span>
