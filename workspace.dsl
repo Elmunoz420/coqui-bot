@@ -17,28 +17,28 @@ workspace "COQUI_BOT" "Telegram-based task management system deployed on OCI" {
             springBoot = container "Spring Boot Application" "REST API + Telegram bot polling + AI integration" "Java22 / Spring Boot 3" {
 
                 todoController = component "ToDoItemController" "REST endpoints for /todolist CRUD" "Spring MVC Controller" {
-                    url "https://github.com/Elmunoz420/coqui-bot/blob/sprint5-emilio/docs/diagrams/controllers.puml"
+                    url "https://github.com/Elmunoz420/coqui-bot/blob/main/docs/diagrams/controllers.puml"
                 }
                 userController = component "UserController" "REST endpoints for /users" "Spring MVC Controller" {
-                    url "https://github.com/Elmunoz420/coqui-bot/blob/sprint5-emilio/docs/diagrams/controllers.puml"
+                    url "https://github.com/Elmunoz420/coqui-bot/blob/main/docs/diagrams/controllers.puml"
                 }
                 aiController = component "AIInsightsController" "POST /api/ai/chat and developer insights" "Spring MVC Controller" {
-                    url "https://github.com/Elmunoz420/coqui-bot/blob/sprint5-emilio/docs/diagrams/controllers.puml"
+                    url "https://github.com/Elmunoz420/coqui-bot/blob/main/docs/diagrams/controllers.puml"
                 }
                 botConsumer = component "BotConsumer / BotActions" "Telegram long-polling loop and command dispatcher" "Spring Component" {
-                    url "https://github.com/Elmunoz420/coqui-bot/blob/sprint5-emilio/docs/diagrams/bot.puml"
+                    url "https://github.com/Elmunoz420/coqui-bot/blob/main/docs/diagrams/bot.puml"
                 }
                 taskService = component "ToDoItemService" "Business logic: Tarea to ToDoItem translation" "Spring Service" {
-                    url "https://github.com/Elmunoz420/coqui-bot/blob/sprint5-emilio/docs/diagrams/services.puml"
+                    url "https://github.com/Elmunoz420/coqui-bot/blob/main/docs/diagrams/services.puml"
                 }
                 oracleConfig = component "OracleConfiguration" "DataSource and UCP connection pool" "Spring Configuration" {
-                    url "https://github.com/Elmunoz420/coqui-bot/blob/sprint5-emilio/docs/diagrams/config.puml"
+                    url "https://github.com/Elmunoz420/coqui-bot/blob/main/docs/diagrams/config.puml"
                 }
                 securityConfig = component "SecurityConfig" "Spring Security session-based auth, BCrypt" "Spring Security" {
-                    url "https://github.com/Elmunoz420/coqui-bot/blob/sprint5-emilio/docs/diagrams/config.puml"
+                    url "https://github.com/Elmunoz420/coqui-bot/blob/main/docs/diagrams/config.puml"
                 }
                 spaForward = component "SpaForwardController" "Serves React SPA for all non-API routes" "Spring MVC Controller" {
-                    url "https://github.com/Elmunoz420/coqui-bot/blob/sprint5-emilio/docs/diagrams/config.puml"
+                    url "https://github.com/Elmunoz420/coqui-bot/blob/main/docs/diagrams/config.puml"
                 }
             }
             oracleATP = container "Oracle ATP" "Autonomous Transaction Processing DB. Tables: TAREA, USUARIO, PROYECTO." "Oracle 19c / ATP Always Free" "Database"
