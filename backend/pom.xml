@@ -161,9 +161,9 @@
 				</executions>
 			</plugin>
 <plugin>
-    <groupId>de.elnarion.util</groupId>
-    <artifactId>plantuml-generator-maven-plugin</artifactId>
-    <version>5.1.0</version>
+	<groupId>de.elnarion.maven</groupId>
+	<artifactId>plantuml-generator-maven-plugin</artifactId>
+	<version>3.0.1</version>
     <executions>
 
         <!-- Controllers -->
