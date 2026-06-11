@@ -161,15 +161,15 @@
 				</executions>
 			</plugin>
 <plugin>
-	<groupId>de.elnarion.maven</groupId>
-	<artifactId>plantuml-generator-maven-plugin</artifactId>
-	<version>3.0.1</version>
+    <groupId>de.elnarion.maven</groupId>
+    <artifactId>plantuml-generator-maven-plugin</artifactId>
+    <version>3.0.1</version>
     <executions>
 
-        <!-- Controllers -->
         <execution>
             <id>generate-controllers</id>
             <goals><goal>generate</goal></goals>
+            <phase>generate-test-sources</phase>
             <configuration>
                 <outputFilename>controllers.puml</outputFilename>
                 <outputDirectory>${project.basedir}/../docs/diagrams</outputDirectory>
@@ -179,10 +179,10 @@
             </configuration>
         </execution>
 
-        <!-- Services -->
         <execution>
             <id>generate-services</id>
             <goals><goal>generate</goal></goals>
+            <phase>generate-test-sources</phase>
             <configuration>
                 <outputFilename>services.puml</outputFilename>
                 <outputDirectory>${project.basedir}/../docs/diagrams</outputDirectory>
@@ -192,10 +192,10 @@
             </configuration>
         </execution>
 
-        <!-- Models -->
         <execution>
             <id>generate-models</id>
             <goals><goal>generate</goal></goals>
+            <phase>generate-test-sources</phase>
             <configuration>
                 <outputFilename>models.puml</outputFilename>
                 <outputDirectory>${project.basedir}/../docs/diagrams</outputDirectory>
@@ -205,10 +205,10 @@
             </configuration>
         </execution>
 
-        <!-- Repositories -->
         <execution>
             <id>generate-repositories</id>
             <goals><goal>generate</goal></goals>
+            <phase>generate-test-sources</phase>
             <configuration>
                 <outputFilename>repositories.puml</outputFilename>
                 <outputDirectory>${project.basedir}/../docs/diagrams</outputDirectory>
@@ -218,10 +218,10 @@
             </configuration>
         </execution>
 
-        <!-- Bot (util) -->
         <execution>
             <id>generate-bot</id>
             <goals><goal>generate</goal></goals>
+            <phase>generate-test-sources</phase>
             <configuration>
                 <outputFilename>bot.puml</outputFilename>
                 <outputDirectory>${project.basedir}/../docs/diagrams</outputDirectory>
@@ -231,10 +231,10 @@
             </configuration>
         </execution>
 
-        <!-- Config + Security -->
         <execution>
             <id>generate-config</id>
             <goals><goal>generate</goal></goals>
+            <phase>generate-test-sources</phase>
             <configuration>
                 <outputFilename>config.puml</outputFilename>
                 <outputDirectory>${project.basedir}/../docs/diagrams</outputDirectory>
