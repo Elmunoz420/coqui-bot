@@ -2,10 +2,11 @@ name: Generate PlantUML Level 4 Diagrams
 
 on:
   push:
-    branches: [sprint5-emilio]
+    branches: [sprint5-emilio, main]
     paths:
       - 'backend/src/main/java/**'
       - 'backend/pom.xml'
+  workflow_dispatch:
 
 jobs:
   generate-and-commit:
