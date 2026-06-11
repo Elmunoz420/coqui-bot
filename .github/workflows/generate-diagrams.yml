@@ -28,7 +28,7 @@ jobs:
 
       - name: Generate PlantUML diagrams
         working-directory: backend
-        run: mvn plantuml-generator:generate --no-transfer-progress -DskipTests
+        run: mvn generate-test-sources --no-transfer-progress -DskipTests
 
       - name: Commit generated diagrams back to repository
         uses: stefanzweifel/git-auto-commit-action@v5
