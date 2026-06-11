@@ -31,7 +31,7 @@ public class ToDoItem {
     double horasEstimadas;        // Mapea a HORAS_ESTIMADAS (nuevo)
     double horasReales;           // Mapea a HORAS_REALES (nuevo)
     boolean done;                 // Inferido de ESTADO (para compatibilidad)
-    Integer sprint;               // Mapea a SPRINT (nuevo)
+    String sprint;               // Mapea a SPRINT (nuevo)
     String assignedUser;          // Nombre del usuario asignado (calculado)
     
     public ToDoItem(){
@@ -61,6 +61,7 @@ public class ToDoItem {
         return description;
     }
 
+    @com.fasterxml.jackson.annotation.JsonAlias({"titulo"})
     public void setDescription(String description) {
         this.description = description;
     }
@@ -123,8 +124,8 @@ public class ToDoItem {
         this.horasReales = horasReales;
     }
 
-    public Integer getSprint() { return sprint; }
-    public void setSprint(Integer sprint) { this.sprint = sprint; }
+    public String getSprint() { return sprint; }
+    public void setSprint(String sprint) { this.sprint = sprint; }
 
     public String getAssignedUser() { return assignedUser; }
     public void setAssignedUser(String assignedUser) { this.assignedUser = assignedUser; }

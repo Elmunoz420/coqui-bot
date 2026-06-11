@@ -6,9 +6,11 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import jakarta.transaction.Transactional;
+import java.util.List;
 
 @Repository
 @Transactional
 @EnableTransactionManagement
 public interface TareaRepository extends JpaRepository<Tarea, Integer> {
+    List<Tarea> findByUsuarioAsignado_UsernameIgnoreCase(String username);
 }

@@ -1,5 +1,6 @@
 package com.springboot.MyTodoList.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.OffsetDateTime;
 
@@ -7,7 +8,8 @@ import java.time.OffsetDateTime;
 @Table(name = "USUARIO")
 public class Usuario {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usuario_seq")
+    @SequenceGenerator(name = "usuario_seq", sequenceName = "SEQ_USUARIO", allocationSize = 1)
     @Column(name = "ID_USUARIO")
     private int idUsuario;
 
@@ -28,6 +30,10 @@ public class Usuario {
 
     @Column(name = "ESTADO")
     private String estado;
+
+    @JsonIgnore
+    @Column(name = "PASSWORD_HASH")
+    private String passwordHash;
 
     public Usuario() {}
 
@@ -51,4 +57,7 @@ public class Usuario {
 
     public String getEstado() { return estado; }
     public void setEstado(String estado) { this.estado = estado; }
+
+    public String getPasswordHash() { return passwordHash; }
+    public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
 }

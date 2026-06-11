@@ -15,7 +15,7 @@
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>17</java.version>
-		<version.lib.ojdbc>21.1.0.0</version.lib.ojdbc>
+		<version.lib.ojdbc>23.3.0.23.09</version.lib.ojdbc>
 		<frontend-src-dir>${project.basedir}/src/main/frontend</frontend-src-dir>
 		<node.version>v23.9.0</node.version>
 		<npm.version>8.1.2</npm.version>
@@ -47,15 +47,13 @@
 		</dependency>
 		<dependency>
 			<groupId>com.oracle.database.jdbc</groupId>
-			<artifactId>ojdbc11-production</artifactId>
-			<version>23.9.0.25.07</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.oracle.database.ha</groupId>
-					<artifactId>simplefan</artifactId>
-				</exclusion>
-			</exclusions>
-			<type>pom</type>
+			<artifactId>ojdbc11</artifactId>
+			<version>${version.lib.ojdbc}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle.database.security</groupId>
+			<artifactId>oraclepki</artifactId>
+			<version>${version.lib.ojdbc}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -162,6 +160,93 @@
 					</execution>
 				</executions>
 			</plugin>
+<plugin>
+    <groupId>de.elnarion.util</groupId>
+    <artifactId>plantuml-generator-maven-plugin</artifactId>
+    <version>5.1.0</version>
+    <executions>
+
+        <!-- Controllers -->
+        <execution>
+            <id>generate-controllers</id>
+            <goals><goal>generate</goal></goals>
+            <configuration>
+                <outputFilename>controllers.puml</outputFilename>
+                <outputDirectory>${project.basedir}/../docs/diagrams</outputDirectory>
+                <scanPackages>
+                    <scanPackage>com.springboot.MyTodoList.controller</scanPackage>
+                </scanPackages>
+            </configuration>
+        </execution>
+
+        <!-- Services -->
+        <execution>
+            <id>generate-services</id>
+            <goals><goal>generate</goal></goals>
+            <configuration>
+                <outputFilename>services.puml</outputFilename>
+                <outputDirectory>${project.basedir}/../docs/diagrams</outputDirectory>
+                <scanPackages>
+                    <scanPackage>com.springboot.MyTodoList.service</scanPackage>
+                </scanPackages>
+            </configuration>
+        </execution>
+
+        <!-- Models -->
+        <execution>
+            <id>generate-models</id>
+            <goals><goal>generate</goal></goals>
+            <configuration>
+                <outputFilename>models.puml</outputFilename>
+                <outputDirectory>${project.basedir}/../docs/diagrams</outputDirectory>
+                <scanPackages>
+                    <scanPackage>com.springboot.MyTodoList.model</scanPackage>
+                </scanPackages>
+            </configuration>
+        </execution>
+
+        <!-- Repositories -->
+        <execution>
+            <id>generate-repositories</id>
+            <goals><goal>generate</goal></goals>
+            <configuration>
+                <outputFilename>repositories.puml</outputFilename>
+                <outputDirectory>${project.basedir}/../docs/diagrams</outputDirectory>
+                <scanPackages>
+                    <scanPackage>com.springboot.MyTodoList.repository</scanPackage>
+                </scanPackages>
+            </configuration>
+        </execution>
+
+        <!-- Bot (util) -->
+        <execution>
+            <id>generate-bot</id>
+            <goals><goal>generate</goal></goals>
+            <configuration>
+                <outputFilename>bot.puml</outputFilename>
+                <outputDirectory>${project.basedir}/../docs/diagrams</outputDirectory>
+                <scanPackages>
+                    <scanPackage>com.springboot.MyTodoList.util</scanPackage>
+                </scanPackages>
+            </configuration>
+        </execution>
+
+        <!-- Config + Security -->
+        <execution>
+            <id>generate-config</id>
+            <goals><goal>generate</goal></goals>
+            <configuration>
+                <outputFilename>config.puml</outputFilename>
+                <outputDirectory>${project.basedir}/../docs/diagrams</outputDirectory>
+                <scanPackages>
+                    <scanPackage>com.springboot.MyTodoList.config</scanPackage>
+                    <scanPackage>com.springboot.MyTodoList.security</scanPackage>
+                </scanPackages>
+            </configuration>
+        </execution>
+
+    </executions>
+</plugin>
 		</plugins>
 	</build>
 </project>

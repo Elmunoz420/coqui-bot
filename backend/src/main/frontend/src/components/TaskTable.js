@@ -67,7 +67,7 @@ function ModalHoras({ tarea, onConfirmar, onCancelar }) {
   );
 }
 
-function TaskTable({ tasks, onToggleDone, onDelete, onOpenDetails }) {
+function TaskTable({ tasks, onToggleDone, onDelete, onOpenDetails, onEdit, hideDeleteAction = false }) {
   const [modalTarea, setModalTarea] = useState(null);
 
   function handleDoneClick(event, task) {
@@ -167,12 +167,19 @@ function TaskTable({ tasks, onToggleDone, onDelete, onOpenDetails }) {
                 <td style={{ fontSize: '0.88rem' }}>{formatDate(task.dueDate)}</td>
                 <td>
                   <div className="actions-cell">
+                    {onEdit && (
+                      <button type="button" className="secondary-button" onClick={() => onEdit(task)}>
+                        Editar
+                      </button>
+                    )}
                     <button type="button" className="secondary-button" onClick={(e) => handleDoneClick(e, task)}>
                       {task.done ? 'Reabrir' : 'Completar'}
                     </button>
-                    <button type="button" className="danger-button" onClick={() => onDelete(task.id)}>
-                      Eliminar
-                    </button>
+                    {!hideDeleteAction && (
+                      <button type="button" className="danger-button" onClick={() => onDelete(task.id)}>
+                        Eliminar
+                      </button>
+                    )}
                   </div>
                 </td>
               </tr>

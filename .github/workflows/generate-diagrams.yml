@@ -1,0 +1,39 @@
+name: Generate PlantUML Level 4 Diagrams
+
+on:
+  push:
+    branches: [sprint5-emilio, main]
+    paths:
+      - 'backend/src/main/java/**'
+      - 'backend/pom.xml'
+  workflow_dispatch:
+
+jobs:
+  generate-and-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Generate PlantUML diagrams
+        working-directory: backend
+        run: mvn plantuml-generator:generate --no-transfer-progress -DskipTests
+
+      - name: Commit generated diagrams back to repository
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "ci: auto-generate PlantUML Level 4 diagrams [skip ci]"
+          file_pattern: "docs/diagrams/*.puml"
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "github-actions[bot]@users.noreply.github.com"
