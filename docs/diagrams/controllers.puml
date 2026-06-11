@@ -1,0 +1,125 @@
+@startuml
+
+class com.springboot.MyTodoList.controller.AIChatController {
+	{field} -anthropicApiKey : String
+	{field} -toDoItemService : com.springboot.MyTodoList.service.ToDoItemService
+	{method} +chat ( body : java.util.Map ) : org.springframework.http.ResponseEntity
+}
+
+
+class com.springboot.MyTodoList.controller.AIInsightsController {
+	{field} -anthropicApiKey : String
+	{field} -toDoItemService : com.springboot.MyTodoList.service.ToDoItemService
+	{method} -buildAdminContext ( tasks : java.util.List ) : String
+	{method} -buildDevContext ( tasks : java.util.List , username : String ) : String
+	{method} -callClaude ( context : String , prompt : String ) : org.springframework.http.ResponseEntity
+	{method} +getAdminInsights () : org.springframework.http.ResponseEntity
+	{method} +getDeveloperInsights ( username : String ) : org.springframework.http.ResponseEntity
+}
+
+
+class com.springboot.MyTodoList.controller.AuthController {
+	{field} -passwordEncoder : org.springframework.security.crypto.password.PasswordEncoder
+	{field} -toDoItemService : com.springboot.MyTodoList.service.ToDoItemService
+	{field} -usuarioRepository : com.springboot.MyTodoList.repository.UsuarioRepository
+	{method} -authenticate ( usuario : com.springboot.MyTodoList.model.Usuario , password : String ) : org.springframework.http.ResponseEntity
+	{method} +getCurrentUser ( username : String ) : org.springframework.http.ResponseEntity
+	{method} -isActive ( usuario : com.springboot.MyTodoList.model.Usuario ) : boolean
+	{method} +login ( request : com.springboot.MyTodoList.controller.AuthController$LoginRequest ) : org.springframework.http.ResponseEntity
+	{method} -normalizeRequestedRole ( role : String ) : String
+	{method} +register ( request : com.springboot.MyTodoList.controller.AuthController$RegisterRequest ) : org.springframework.http.ResponseEntity
+}
+
+
+class com.springboot.MyTodoList.controller.AuthController$LoginRequest {
+	{field} -password : String
+	{field} -username : String
+	{method} +equals ( o : Object ) : boolean
+	{method} +hashCode () : int
+	{method} +password () : String
+	{method} +toString () : String
+	{method} +username () : String
+}
+
+
+class com.springboot.MyTodoList.controller.AuthController$RegisterRequest {
+	{field} -name : String
+	{field} -password : String
+	{field} -role : String
+	{field} -username : String
+	{method} +equals ( o : Object ) : boolean
+	{method} +hashCode () : int
+	{method} +name () : String
+	{method} +password () : String
+	{method} +role () : String
+	{method} +toString () : String
+	{method} +username () : String
+}
+
+
+class com.springboot.MyTodoList.controller.AuthController$UserSession {
+	{field} -id : int
+	{field} -name : String
+	{field} -role : String
+	{field} -status : String
+	{field} -username : String
+	{method} +equals ( o : Object ) : boolean
+	{method}  {static} +from ( usuario : com.springboot.MyTodoList.model.Usuario ) : com.springboot.MyTodoList.controller.AuthController$UserSession
+	{method} +hashCode () : int
+	{method} +id () : int
+	{method} +name () : String
+	{method}  {static} -normalizeRole ( role : String ) : String
+	{method} +role () : String
+	{method} +status () : String
+	{method} +toString () : String
+	{method} +username () : String
+}
+
+
+class com.springboot.MyTodoList.controller.DbPingController {
+	{field} -dataSource : javax.sql.DataSource
+	{method} +ping () : String
+}
+
+
+class com.springboot.MyTodoList.controller.ToDoItemBotController {
+	{field} -botProps : com.springboot.MyTodoList.config.BotProps
+	{field} -deepSeekService : com.springboot.MyTodoList.service.DeepSeekService
+	{field} {static} -logger : org.slf4j.Logger
+	{field} -telegramBotToken : String
+	{field} -telegramClient : org.telegram.telegrambots.meta.generics.TelegramClient
+	{field} -toDoItemService : com.springboot.MyTodoList.service.ToDoItemService
+	{method} +afterRegistration ( botSession : org.telegram.telegrambots.longpolling.BotSession ) : void
+	{method} +consume ( update : org.telegram.telegrambots.meta.api.objects.Update ) : void
+	{method} +getBotToken () : String
+	{method} +getUpdatesConsumer () : org.telegram.telegrambots.longpolling.interfaces.LongPollingUpdateConsumer
+}
+
+
+class com.springboot.MyTodoList.controller.ToDoItemController {
+	{field} -toDoItemService : com.springboot.MyTodoList.service.ToDoItemService
+	{method} +addToDoItem ( todoItem : com.springboot.MyTodoList.model.ToDoItem ) : org.springframework.http.ResponseEntity
+	{method} +deleteToDoItem ( id : int ) : org.springframework.http.ResponseEntity
+	{method} +getAllToDoItems () : java.util.List
+	{method} +getAssignedToCurrentUser ( username : String ) : java.util.List
+	{method} +getToDoItemById ( id : int ) : org.springframework.http.ResponseEntity
+	{method} +updateToDoItem ( toDoItem : com.springboot.MyTodoList.model.ToDoItem , id : int ) : org.springframework.http.ResponseEntity
+}
+
+
+class com.springboot.MyTodoList.controller.UserController {
+	{field} -userService : com.springboot.MyTodoList.service.UserService
+	{method} +addUser ( newUser : com.springboot.MyTodoList.model.User ) : org.springframework.http.ResponseEntity
+	{method} +deleteUser ( id : int ) : org.springframework.http.ResponseEntity
+	{method} +getAllUsers () : java.util.List
+	{method} +getUserById ( id : int ) : org.springframework.http.ResponseEntity
+	{method} +test () : com.springboot.MyTodoList.model.User
+	{method} +updateUser ( user : com.springboot.MyTodoList.model.User , id : int ) : org.springframework.http.ResponseEntity
+}
+
+
+
+
+
+
+@enduml

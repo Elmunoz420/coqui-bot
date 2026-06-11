@@ -1,0 +1,71 @@
+@startuml
+
+class com.springboot.MyTodoList.model.Proyecto {
+	{field} +descripcion : String
+	{field} +estado : String
+	{field} +fechaCreacion : java.time.OffsetDateTime
+	{field} +idProyecto : int
+	{field} +nombre : String
+}
+
+
+class com.springboot.MyTodoList.model.Tarea {
+	{field} +assignedUser : String
+	{field} +descripcion : String
+	{field} +estado : String
+	{field} +fechaCierre : java.time.OffsetDateTime
+	{field} +fechaCreacion : java.time.OffsetDateTime
+	{field} +fechaLimite : java.time.OffsetDateTime
+	{field} +horasEstimadas : Double
+	{field} +horasReales : Double
+	{field} +idTarea : int
+	{field} +prioridad : String
+	{field} +sprint : Integer
+	{field} +titulo : String
+	{method} +toString () : String
+}
+
+
+class com.springboot.MyTodoList.model.ToDoItem {
+	{field} +ID : int
+	{field} +assignedUser : String
+	{field} +creation_ts : java.time.OffsetDateTime
+	{field} +descripcion : String
+	{field} +description : String
+	{field} +done : boolean
+	{field} +estado : String
+	{field} +fechaLimite : java.time.OffsetDateTime
+	{field} +horasEstimadas : double
+	{field} +horasReales : double
+	{field} +prioridad : String
+	{field} +sprint : String
+	{method} +toString () : String
+}
+
+
+class com.springboot.MyTodoList.model.User {
+	{field} +ID : int
+	{field} +phonenumber : String
+	{field} +userpassword : String
+}
+
+
+class com.springboot.MyTodoList.model.Usuario {
+	{field} +estado : String
+	{field} +fechaRegistro : java.time.OffsetDateTime
+	{field} +idUsuario : int
+	{field} +nombre : String
+	{field} +passwordHash : String
+	{field} +rol : String
+	{field} +telegramId : String
+	{field} +username : String
+}
+
+
+
+
+com.springboot.MyTodoList.model.Tarea -->  com.springboot.MyTodoList.model.Proyecto :  @ManyToOne\nproyecto
+com.springboot.MyTodoList.model.Tarea -->  com.springboot.MyTodoList.model.Usuario :  @ManyToOne\nusuarioAsignado
+
+
+@enduml

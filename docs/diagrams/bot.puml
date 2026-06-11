@@ -1,0 +1,76 @@
+@startuml
+
+class com.springboot.MyTodoList.util.BotActions {
+	{field} ~chatId : long
+	{field} +deepSeekService : com.springboot.MyTodoList.service.DeepSeekService
+	{field} ~exit : boolean
+	{field} {static} -logger : org.slf4j.Logger
+	{field} ~requestText : String
+	{field} ~telegramClient : org.telegram.telegrambots.meta.generics.TelegramClient
+	{field} +todoService : com.springboot.MyTodoList.service.ToDoItemService
+	{method} +fnAddItem () : void
+	{method} +fnDelete () : void
+	{method} +fnDone () : void
+	{method} +fnElse () : void
+	{method} +fnHide () : void
+	{method} +fnLLM () : void
+	{method} +fnListAll () : void
+	{method} +fnStart () : void
+	{method} +fnUndo () : void
+	{method} -formatDueDate ( fechaLimite : java.time.OffsetDateTime ) : String
+	{method} -formatPriority ( prioridad : String ) : String
+	{method} -normalizePriority ( priorityText : String ) : String
+}
+
+
+class com.springboot.MyTodoList.util.BotClient {
+	{method} +telegramClient ( botProps : com.springboot.MyTodoList.config.BotProps ) : org.telegram.telegrambots.meta.generics.TelegramClient
+}
+
+
+enum com.springboot.MyTodoList.util.BotCommands {
+	{field} +ADD_ITEM
+	{field} +HIDE_COMMAND
+	{field} +LLM_REQ
+	{field} +START_COMMAND
+	{field} +TODO_LIST
+}
+
+
+class com.springboot.MyTodoList.util.BotHelper {
+	{field} {static} -logger : org.slf4j.Logger
+	{method}  {static} +sendMessageToTelegram ( chatId : Long , text : String , bot : org.telegram.telegrambots.meta.generics.TelegramClient ) : void
+	{method}  {static} +sendMessageToTelegram ( chatId : Long , text : String , bot : org.telegram.telegrambots.meta.generics.TelegramClient , rk : org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup ) : void
+}
+
+
+enum com.springboot.MyTodoList.util.BotLabels {
+	{field} +ADD_NEW_ITEM
+	{field} +DASH
+	{field} +DELETE
+	{field} +DONE
+	{field} +HIDE_MAIN_SCREEN
+	{field} +LIST_ALL_ITEMS
+	{field} +MY_TODO_LIST
+	{field} +SHOW_MAIN_SCREEN
+	{field} +UNDO
+}
+
+
+enum com.springboot.MyTodoList.util.BotMessages {
+	{field} +BOT_REGISTERED_STARTED
+	{field} +BYE
+	{field} +HELLO_MYTODO_BOT
+	{field} +ITEM_DELETED
+	{field} +ITEM_DONE
+	{field} +ITEM_UNDONE
+	{field} +NEW_ITEM_ADDED
+	{field} +TYPE_NEW_TODO_ITEM
+}
+
+
+
+
+
+
+@enduml

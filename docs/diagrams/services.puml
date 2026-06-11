@@ -1,0 +1,48 @@
+@startuml
+
+class com.springboot.MyTodoList.service.DeepSeekService {
+	{field} -httpClient : org.apache.hc.client5.http.impl.classic.CloseableHttpClient
+	{field} -httpPost : org.apache.hc.client5.http.classic.methods.HttpPost
+	{method} +generateText ( prompt : String ) : String
+}
+
+
+class com.springboot.MyTodoList.service.ToDoItemService {
+	{field} -proyectoPorDefecto : com.springboot.MyTodoList.model.Proyecto
+	{field} -proyectoRepository : com.springboot.MyTodoList.repository.ProyectoRepository
+	{field} -tareaRepository : com.springboot.MyTodoList.repository.TareaRepository
+	{field} -usuarioPorDefecto : com.springboot.MyTodoList.model.Usuario
+	{field} -usuarioRepository : com.springboot.MyTodoList.repository.UsuarioRepository
+	{method} +addToDoItem ( toDoItem : com.springboot.MyTodoList.model.ToDoItem ) : com.springboot.MyTodoList.model.ToDoItem
+	{method} -applyToDoItemToTarea ( td : com.springboot.MyTodoList.model.ToDoItem , tarea : com.springboot.MyTodoList.model.Tarea ) : void
+	{method} +deleteToDoItem ( id : int ) : boolean
+	{method} -ensureUser ( username : String , nombre : String , rol : String ) : com.springboot.MyTodoList.model.Usuario
+	{method} +findAll () : java.util.List
+	{method} +findAssignedToUsername ( username : String ) : java.util.List
+	{method} +getItemById ( id : int ) : org.springframework.http.ResponseEntity
+	{method} +getToDoItemById ( id : int ) : com.springboot.MyTodoList.model.ToDoItem
+	{method} +getUserProfile ( username : String ) : com.springboot.MyTodoList.model.Usuario
+	{method} +initDefaults () : void
+	{method} -parseSprint ( sprint : String ) : Integer
+	{method} -resolveAssignedUser ( assignedUser : String ) : com.springboot.MyTodoList.model.Usuario
+	{method} -tareaToToDoItem ( t : com.springboot.MyTodoList.model.Tarea ) : com.springboot.MyTodoList.model.ToDoItem
+	{method} +updateToDoItem ( id : int , td : com.springboot.MyTodoList.model.ToDoItem ) : com.springboot.MyTodoList.model.ToDoItem
+}
+
+
+class com.springboot.MyTodoList.service.UserService {
+	{field} -userRepository : com.springboot.MyTodoList.repository.UserRepository
+	{method} +addUser ( newUser : com.springboot.MyTodoList.model.User ) : com.springboot.MyTodoList.model.User
+	{method} +deleteUser ( id : int ) : boolean
+	{method} +findAll () : java.util.List
+	{method} +getUserById ( id : int ) : org.springframework.http.ResponseEntity
+	{method} +test () : com.springboot.MyTodoList.model.User
+	{method} +updateUser ( id : int , user2update : com.springboot.MyTodoList.model.User ) : com.springboot.MyTodoList.model.User
+}
+
+
+
+
+
+
+@enduml

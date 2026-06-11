@@ -1,0 +1,30 @@
+@startuml
+
+interface com.springboot.MyTodoList.repository.ProyectoRepository {
+	{method}  {abstract} +findByNombre ( nombre : String ) : java.util.Optional
+}
+
+
+interface com.springboot.MyTodoList.repository.TareaRepository {
+	{method}  {abstract} +findByUsuarioAsignado_UsernameIgnoreCase ( username : String ) : java.util.List
+}
+
+
+interface com.springboot.MyTodoList.repository.UserRepository {
+}
+
+
+interface com.springboot.MyTodoList.repository.UsuarioRepository {
+	{method}  {abstract} +findByNombreIgnoreCase ( nombre : String ) : java.util.Optional
+	{method}  {abstract} +findByUsername ( username : String ) : java.util.Optional
+	{method}  {abstract} +findByUsernameIgnoreCase ( username : String ) : java.util.Optional
+	{method}  {abstract} +findFirstByNombreIgnoreCaseOrderByIdUsuarioAsc ( nombre : String ) : java.util.Optional
+	{method}  {abstract} +findFirstByUsernameIgnoreCaseOrderByIdUsuarioAsc ( username : String ) : java.util.Optional
+}
+
+
+
+
+
+
+@enduml
