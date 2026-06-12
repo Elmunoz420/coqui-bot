@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(sed -n '58p' backend/src/main/frontend/e2e/auth.spec.ts)",
+      "Bash(sed -n '84,90p' backend/src/main/frontend/e2e/auth.spec.ts)",
+      "Bash(sed -n '184,215p' backend/src/main/frontend/e2e/auth.spec.ts)",
+      "Bash(sed -n '38,47p' backend/src/main/frontend/e2e/tasks.spec.ts)",
+      "Bash(sed -n '81p' backend/src/main/frontend/e2e/tasks.spec.ts)",
+      "Bash(sed -n '91,101p' backend/src/main/frontend/e2e/tasks.spec.ts)",
+      "Bash(sed -n '124,138p' backend/src/main/frontend/e2e/task-crud.spec.ts)",
+      "Bash(sed -n '168,190p' backend/src/main/frontend/e2e/task-crud.spec.ts)",
+      "Bash(sed -n '192,230p' backend/src/main/frontend/e2e/task-crud.spec.ts)",
+      "Bash(sed -n '9,12p' backend/src/main/frontend/e2e/auth.spec.ts)",
+      "Bash(sed -n '208,250p' backend/src/main/frontend/e2e/auth.spec.ts)",
+      "Bash(node -e \"const h = require\\('./backend/src/main/frontend/e2e/fixtures/login.har'\\); const e = h.log.entries[0]; console.log\\('entries:', h.log.entries.length\\); console.log\\('method:', e.request.method\\); console.log\\('url:', e.request.url\\); console.log\\('status:', e.response.status\\); console.log\\('body:', e.response.content.text\\);\")",
+      "Bash(node -e \"const fs=require\\('fs'\\); JSON.parse\\(fs.readFileSync\\('c:/Users/Lenovo/Downloads/coqui-bot/backend/src/main/frontend/e2e/fixtures/login.har','utf8'\\)\\); console.log\\('valid JSON'\\);\")",
+      "Bash(node -e ' *)",
+      "Bash(npx playwright *)"
+    ]
+  }
+}
