@@ -20,7 +20,7 @@ Timeout: 5000ms
 
 Call log:
   - Expect "toHaveURL" with timeout 5000ms
-    13 × unexpected value "http://localhost:3000/me"
+    12 × unexpected value "http://localhost:3000/me"
 
 ```
 
@@ -87,7 +87,7 @@ Call log:
     - heading "Actividad reciente" [level=2]
     - paragraph: Últimos cambios
     - strong: Preview local activado con tareas mock
-    - text: 11/6/2026, 11:24:04 p.m.
+    - text: 11/6/2026, 11:38:57 p.m.
   - strong: 0h
   - text: Horas
   - strong: 0%
